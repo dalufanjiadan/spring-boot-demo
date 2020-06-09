@@ -18,6 +18,8 @@ public class TestController {
 	@GetMapping("/hello")
 	public RestResponse<String> hello() {
 
+		int a=1/0;
+
 		return RestResponse.ok("hello world"); 
 	}
 }
