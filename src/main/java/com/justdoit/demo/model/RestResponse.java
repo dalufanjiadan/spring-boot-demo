@@ -1,0 +1,106 @@
+package com.justdoit.demo.model;
+
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+enum Status {
+
+	OK(0, "ok"), //
+	BAD_REQUEST(1, "bad request"), //
+	VALIDATION_EXCEPTION(2, "validation exception"), //
+	EXCEPTION(3, "exception"), //
+	DUPLICATE_ENTITY(4, "duplicate entity"), //
+	UNAUTHORIZED(401, "401 unauthorized"), //
+	ACCESS_DENIED(403, "403 access denied"), //
+	NOT_FOUND(404, "404 not found"), //
+	BAD_CREDENTIALS(499, "499 bad credentials. Invalid username/password supplied");
+
+	private Integer code;
+	private String message;
+}
+
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class RestResponse<T> {
+
+	private Integer code;
+	private String message;
+	private T data;
+	private String timestamp = LocalDateTime.now().toString();
+
+	public static <T> RestResponse<T> ok() {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.OK);
+		return response;
+	}
+
+	public static <T> RestResponse<T> ok(T data) {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.OK);
+		response.setData(data);
+		return response;
+	}
+
+	public static <T> RestResponse<T> badRequest() {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.BAD_REQUEST);
+		return response;
+	}
+
+	public static <T> RestResponse<T> unauthorized() {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.UNAUTHORIZED);
+		return response;
+	}
+
+	public static <T> RestResponse<T> validationException() {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.VALIDATION_EXCEPTION);
+		return response;
+	}
+
+	public static <T> RestResponse<T> badCredentials() {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.BAD_CREDENTIALS);
+		return response;
+	}
+
+	public static <T> RestResponse<T> accessDenied() {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.ACCESS_DENIED);
+		return response;
+	}
+
+	public static <T> RestResponse<T> exception() {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.EXCEPTION);
+		return response;
+	}
+
+	public static <T> RestResponse<T> notFound() {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.NOT_FOUND);
+		return response;
+	}
+
+	public static <T> RestResponse<T> duplicateEntity() {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.DUPLICATE_ENTITY);
+		return response;
+	}
+
+	private void setStatus(Status status) {
+		this.code = status.getCode();
+		this.message = status.getMessage();
+	}
+
+}
