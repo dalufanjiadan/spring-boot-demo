@@ -1,10 +1,15 @@
 package com.justdoit.demo.controller;
 
+import java.util.Locale;
+
 import javax.validation.Valid;
 
 import com.justdoit.demo.model.RestResponse;
 import com.justdoit.demo.model.User;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +27,22 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/api/v1/test")
 public class TestController {
 
+	@Autowired
+	private MessageSource messageSource;
+
 	@ApiOperation(value = "1 hello")
 	@PostMapping("/hello")
 	public RestResponse<String> hello(@RequestBody @Valid User user) {
 
 		return RestResponse.ok("hello world");
+	}
+
+	@ApiOperation(value = "2 lang")
+	@GetMapping("/lang")
+	public Object lang() {
+		Locale locale = LocaleContextHolder.getLocale();
+		System.out.println(messageSource.getMessage("hello", null, locale));
+
+		return RestResponse.ok("hello");
 	}
 }
