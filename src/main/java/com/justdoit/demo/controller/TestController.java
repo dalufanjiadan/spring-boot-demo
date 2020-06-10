@@ -35,8 +35,8 @@ public class TestController {
 	private UserMapper userMapper;
 
 	@ApiOperation(value = "1 hello")
-	@PostMapping("/hello")
-	public RestResponse<String> hello(@RequestBody @Valid User user) {
+	@GetMapping("/hello")
+	public RestResponse<String> hello() {
 
 		return RestResponse.ok("hello world");
 	}
