@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
 
+	private Long id;
+
 	@NotBlank(message = "用户名不能为空")
 	@Size(min = 2, max = 10, message = "用户名长度需满足2-10")
 	private String username;
