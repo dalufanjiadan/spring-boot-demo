@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.validation.Valid;
 
+import com.justdoit.demo.mapper.UserMapper;
 import com.justdoit.demo.model.RestResponse;
 import com.justdoit.demo.model.User;
 
@@ -30,6 +31,9 @@ public class TestController {
 	@Autowired
 	private MessageSource messageSource;
 
+	@Autowired
+	private UserMapper userMapper;
+
 	@ApiOperation(value = "1 hello")
 	@PostMapping("/hello")
 	public RestResponse<String> hello(@RequestBody @Valid User user) {
@@ -45,4 +49,14 @@ public class TestController {
 
 		return RestResponse.ok("hello");
 	}
+
+
+	@GetMapping("/mapper")
+	public void mapper() {
+		
+
+		System.out.println(userMapper.findAll());
+	}
+
+
 }
