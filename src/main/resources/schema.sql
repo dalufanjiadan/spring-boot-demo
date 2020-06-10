@@ -4,6 +4,7 @@ CREATE TABLE `user`(
 	`id` bigint(20) AUTO_INCREMENT PRIMARY KEY,
 	`username` varchar(250) NOT NULL COMMENT '用户名',
 	`password` varchar(250) NOT NULL COMMENT '密码',
+	`phone` varchar(11) NOT NULL COMMENT '电话号码',
 	`created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '创建时间',
 	`updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '更新时间',
 	`deleted_at` datetime(6) DEFAULT NULL COMMENT '删除时间',

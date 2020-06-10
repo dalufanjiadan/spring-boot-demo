@@ -23,9 +23,10 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping
+
 	public Object createUser(@RequestBody @Valid User user) {
 
-		return null;
+		return userService.createUser(user);
 	}
 
 	@GetMapping

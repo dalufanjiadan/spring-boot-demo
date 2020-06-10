@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/api/v1/lang")
-@Api(tags = "国际化", description = "国际化")
+@Api(tags = "国际化11", description = "国际化")
 public class LangController {
 
 	@ApiOperation("切换语言")

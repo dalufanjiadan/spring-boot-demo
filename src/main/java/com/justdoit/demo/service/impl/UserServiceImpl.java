@@ -18,8 +18,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public RestResponse<User> createUser(User user) {
-		// TODO Auto-generated method stub
-		return null;
+
+		userMapper.insertUser(user);
+		
+		return RestResponse.ok(user);
 	}
 
 	@Override

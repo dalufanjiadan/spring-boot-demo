@@ -23,10 +23,10 @@ public class User {
 
 	@NotBlank(message = "密码不能为空")
 	@Size(min = 6, max = 20, message = "密码长度需满足6-20")
-	@JsonIgnore
+	// @JsonIgnore
 	private String password;
 
-	@Phone
+	// @Phone
 	private String phone;
 
 }

@@ -11,6 +11,8 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface UserMapper {
 
+	int insertUser(User user);
+
 	@Select("select * from user")
 	List<User> findAll();
 }

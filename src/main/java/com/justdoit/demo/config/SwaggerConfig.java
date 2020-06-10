@@ -22,7 +22,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 // apis 指定生成API的扫描条件
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                // .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 // 扫描包
                 .apis(RequestHandlerSelectors.basePackage("com.justdoit.demo.controller"))
                 // paths 指定生成API的path
