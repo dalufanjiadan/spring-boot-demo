@@ -3,6 +3,8 @@ package com.justdoit.demo.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.justdoit.demo.model.User;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -10,5 +12,5 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper {
 
 	@Select("select * from user")
-	List<Map<String, Object>> findAll();
+	List<User> findAll();
 }

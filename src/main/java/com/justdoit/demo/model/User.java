@@ -3,6 +3,7 @@ package com.justdoit.demo.model;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.justdoit.demo.validator.Phone;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class User {
 
 	@NotBlank(message = "密码不能为空")
 	@Size(min = 6, max = 20, message = "密码长度需满足6-20")
+	@JsonIgnore
 	private String password;
 
 	@Phone

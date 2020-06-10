@@ -50,13 +50,12 @@ public class TestController {
 		return RestResponse.ok("hello");
 	}
 
-
 	@GetMapping("/mapper")
-	public void mapper() {
-		
+	public Object mapper() {
 
 		System.out.println(userMapper.findAll());
-	}
 
+		return RestResponse.ok(userMapper.findAll());
+	}
 
 }
