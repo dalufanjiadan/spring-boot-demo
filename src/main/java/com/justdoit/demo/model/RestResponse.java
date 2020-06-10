@@ -62,9 +62,10 @@ public class RestResponse<T> {
 		return response;
 	}
 
-	public static <T> RestResponse<T> validationException() {
+	public static <T> RestResponse<T> validationException(String msg) {
 		RestResponse<T> response = new RestResponse<>();
 		response.setStatus(Status.VALIDATION_EXCEPTION);
+		response.setMessage(msg);
 		return response;
 	}
 
