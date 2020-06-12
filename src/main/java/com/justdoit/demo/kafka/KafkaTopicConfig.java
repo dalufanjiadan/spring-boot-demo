@@ -1,4 +1,4 @@
-package com.justdoit.demo.config.kafka;
+package com.justdoit.demo.kafka;
 
 import java.util.HashMap;
 import java.util.Map;

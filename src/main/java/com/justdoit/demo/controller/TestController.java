@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import javax.validation.Valid;
 
-import com.justdoit.demo.config.kafka.KafKaProducerService;
+import com.justdoit.demo.kafka.KafKaProducerService;
 import com.justdoit.demo.mapper.UserMapper;
 import com.justdoit.demo.model.RestResponse;
 import com.justdoit.demo.model.User;
