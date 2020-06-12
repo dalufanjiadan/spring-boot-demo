@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
 public class KafkaProducerConfig {
@@ -19,16 +20,16 @@ public class KafkaProducerConfig {
 	private String bootstrapAddress;
 
 	@Bean
-	public ProducerFactory<String, String> producerOneFactory() {
+	public ProducerFactory<String, Object> producerOneFactory() {
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 		return new DefaultKafkaProducerFactory<>(configProps);
 	}
 
 	@Bean(name = "kafkaTemplateOne")
-	public KafkaTemplate<String, String> kafkaTemplateOne() {
+	public KafkaTemplate<String, Object> kafkaTemplateOne() {
 		return new KafkaTemplate<>(producerOneFactory());
 	}
 
@@ -43,6 +44,6 @@ public class KafkaProducerConfig {
 
 	@Bean(name = "kafkaTemplateTwo")
 	public KafkaTemplate<String, String> kafkaTemplateTwo() {
-		return new KafkaTemplate<>(producerOneFactory());
+		return new KafkaTemplate<>(producerTwoFactory());
 	}
 }
