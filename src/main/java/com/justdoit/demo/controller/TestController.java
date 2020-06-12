@@ -68,12 +68,16 @@ public class TestController {
 	// 发送消息方法
 	public void send() {
 
-		kafkaTemplate.send("test", "hello world");
+		kafkaTemplate.send("one", String.valueOf(System.currentTimeMillis()));
+		kafkaTemplate.send("two", "hello world");
+		kafkaTemplate.send("three", "hello world");
 	}
 
-	@KafkaListener(topics = "test", groupId = "group-id")
-	public void listen(String message) {
+	@KafkaListener(topics = "one", groupId = "group-id")
+	public void listenTopic(String message) {
 		System.out.println("Received Messasge in group - group-id: " + message);
 	}
+
+
 
 }
