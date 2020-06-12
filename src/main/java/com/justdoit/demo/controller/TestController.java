@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.validation.Valid;
 
+import com.justdoit.demo.config.kafka.KafKaProducerService;
 import com.justdoit.demo.mapper.UserMapper;
 import com.justdoit.demo.model.RestResponse;
 import com.justdoit.demo.model.User;
@@ -33,8 +34,7 @@ import io.swagger.annotations.ApiOperation;
 public class TestController {
 
 	@Autowired
-	@Qualifier("kafkaTemplateOne")
-	private KafkaTemplate<String, Object> kafkaTemplate;
+	private KafKaProducerService kafKaProducerService;
 
 	@Autowired
 	private MessageSource messageSource;
@@ -70,27 +70,11 @@ public class TestController {
 	// 发送消息方法
 	public void send() {
 
-		// kafkaTemplate.send("one", String.valueOf(System.currentTimeMillis()));
-
 		User user = new User(11L, "username", "password", "phone");
 
-		kafkaTemplate.send("two", user);
-		// kafkaTemplate.send("three", "hello world");
+		kafKaProducerService.sendMessage("message" + System.currentTimeMillis());
+		kafKaProducerService.saveCreateUserLog(user);
+
 	}
-
-	// @KafkaListener(topics = "one", groupId = "group-id")
-	// public void listenTopicOne(String message) {
-	// 	System.out.println("Received Message from topic one in group - group-id: " + message);
-	// }
-
-	@KafkaListener(topics = "two", groupId = "group-id-1")
-	public void listenTopicTwo(User message) {
-		System.out.println("Received Message From topic two in group - group-id: " + message);
-	}
-
-	// @KafkaListener(topics = "three", groupId = "group-id")
-	// public void listenTopicThree(String message) {
-	// 	System.out.println("Received Message From Topic three in group - group-id: " + message);
-	// }
 
 }

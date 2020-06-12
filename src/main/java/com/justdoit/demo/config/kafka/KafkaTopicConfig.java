@@ -8,6 +8,7 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
 
 @Configuration
@@ -16,14 +17,11 @@ public class KafkaTopicConfig {
 	@Value(value = "${kafka.bootstrapAddress}")
 	private String bootstrapAddress;
 
-	@Value(value = "${kafka.topic.one}")
-	private String topicOne;
+	@Value(value = "${kafka.topic.test}")
+	private String topicNameTest;
 
-	@Value(value = "${kafka.topic.two}")
-	private String topicTwo;
-
-	@Value(value = "${kafka.topic.three}")
-	private String topicThree;
+	@Value(value = "${kafka.topic.user}")
+	private String topicNameUser;
 
 	@Bean
 	public KafkaAdmin kafkaAdmin() {
@@ -33,17 +31,20 @@ public class KafkaTopicConfig {
 	}
 
 	@Bean
-	public NewTopic topic1() {
-		return new NewTopic(topicOne, 1, (short) 1);
+	public NewTopic generalTopic() {
+		return TopicBuilder//
+				.name(topicNameTest)//
+				.partitions(1)//
+				.replicas(1)//
+				.build();
 	}
 
 	@Bean
-	public NewTopic topic2() {
-		return new NewTopic(topicTwo, 6, (short) 1);
-	}
-
-	@Bean
-	public NewTopic topic3() {
-		return new NewTopic(topicThree, 1, (short) 1);
+	public NewTopic userTopic() {
+		return TopicBuilder//
+				.name(topicNameUser)//
+				.partitions(1)//
+				.replicas(1)//
+				.build();
 	}
 }

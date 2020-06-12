@@ -3,6 +3,8 @@ package com.justdoit.demo.config.kafka;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.justdoit.demo.model.User;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,13 +24,21 @@ public class KafkaConsumerConfig {
 	@Value(value = "${kafka.bootstrapAddress}")
 	private String bootstrapAddress;
 
+	@Value(value = "${kafka.consumer.groupId.test}")
+	private String groupIdTest;
+
+	@Value(value = "${kafka.consumer.groupId.user}")
+	private String groupIdUser;
+
+	// 1. Consume string data from Kafka
+
 	@Bean
 	public ConsumerFactory<String, String> consumerFactory() {
 		Map<String, Object> props = new HashMap<>();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-		props.put(ConsumerConfig.GROUP_ID_CONFIG, "group-id-1");
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, groupIdTest);
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 		return new DefaultKafkaConsumerFactory<>(props);
 	}
@@ -37,6 +47,23 @@ public class KafkaConsumerConfig {
 	public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
+		return factory;
+	}
+
+	// 2. Consume user objects from Kafka
+
+	public ConsumerFactory<String, User> userConsumerFactory() {
+		Map<String, Object> props = new HashMap<>();
+		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, groupIdUser);
+		props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+		return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(User.class));
+	}
+
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, User> userKafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, User> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(userConsumerFactory());
 		return factory;
 	}
 }

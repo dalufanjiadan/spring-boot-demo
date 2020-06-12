@@ -46,6 +46,9 @@ logging:
 kafka:
     bootstrapAddress: localhost:9092
     topic:
-        one: one
-        two: two
-        three: three
+        test: test
+        user: user
+    consumer:
+        groupId:
+            test: test
+            user: user

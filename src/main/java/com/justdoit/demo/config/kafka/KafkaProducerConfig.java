@@ -3,6 +3,8 @@ package com.justdoit.demo.config.kafka;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.justdoit.demo.model.User;
+
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +21,25 @@ public class KafkaProducerConfig {
 	@Value(value = "${kafka.bootstrapAddress}")
 	private String bootstrapAddress;
 
+	// 1. Send string to Kafka
+
 	@Bean
-	public ProducerFactory<String, Object> producerOneFactory() {
+	public ProducerFactory<String, String> producerFactory() {
+		Map<String, Object> props = new HashMap<>();
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		return new DefaultKafkaProducerFactory<>(props);
+	}
+
+	@Bean
+	public KafkaTemplate<String, String> kafkaTemplate() {
+		return new KafkaTemplate<>(producerFactory());
+	}
+
+	// 2. Send User objects to Kafka
+	@Bean
+	public ProducerFactory<String, User> userProducerFactory() {
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -28,22 +47,8 @@ public class KafkaProducerConfig {
 		return new DefaultKafkaProducerFactory<>(configProps);
 	}
 
-	@Bean(name = "kafkaTemplateOne")
-	public KafkaTemplate<String, Object> kafkaTemplateOne() {
-		return new KafkaTemplate<>(producerOneFactory());
-	}
-
 	@Bean
-	public ProducerFactory<String, String> producerTwoFactory() {
-		Map<String, Object> configProps = new HashMap<>();
-		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		return new DefaultKafkaProducerFactory<>(configProps);
-	}
-
-	@Bean(name = "kafkaTemplateTwo")
-	public KafkaTemplate<String, String> kafkaTemplateTwo() {
-		return new KafkaTemplate<>(producerTwoFactory());
+	public KafkaTemplate<String, User> userKafkaTemplate() {
+		return new KafkaTemplate<>(userProducerFactory());
 	}
 }
