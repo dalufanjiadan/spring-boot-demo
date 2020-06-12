@@ -9,6 +9,7 @@ import com.justdoit.demo.model.RestResponse;
 import com.justdoit.demo.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -32,6 +33,7 @@ import io.swagger.annotations.ApiOperation;
 public class TestController {
 
 	@Autowired
+	@Qualifier("kafkaTemplateOne")
 	private KafkaTemplate<String, String> kafkaTemplate;
 
 	@Autowired
@@ -74,8 +76,18 @@ public class TestController {
 	}
 
 	@KafkaListener(topics = "one", groupId = "group-id")
-	public void listenTopic(String message) {
-		System.out.println("Received Messasge in group - group-id: " + message);
+	public void listenTopicOne(String message) {
+		System.out.println("Received Message from topic one in group - group-id: " + message);
+	}
+
+	@KafkaListener(topics = "two", groupId = "group-id")
+	public void listenTopicTwo(String message) {
+		System.out.println("Received Message From topic two in group - group-id: " + message);
+	}
+
+	@KafkaListener(topics = "three", groupId = "group-id")
+	public void listenTopicThree(String message) {
+		System.out.println("Received Message From Topic three in group - group-id: " + message);
 	}
 
 
