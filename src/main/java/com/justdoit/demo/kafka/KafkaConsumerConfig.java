@@ -17,8 +17,8 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-@EnableKafka
-@Configuration
+// @EnableKafka
+// @Configuration
 public class KafkaConsumerConfig {
 
 	@Value(value = "${kafka.bootstrapAddress}")

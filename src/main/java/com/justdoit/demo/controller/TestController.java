@@ -1,6 +1,7 @@
 package com.justdoit.demo.controller;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -33,8 +34,8 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/api/v1/test")
 public class TestController {
 
-	@Autowired
-	private KafKaProducerService kafKaProducerService;
+	// @Autowired
+	// private KafKaProducerService kafKaProducerService;
 
 	@Autowired
 	private MessageSource messageSource;
@@ -48,6 +49,14 @@ public class TestController {
 
 		send();
 		return RestResponse.ok("hello world");
+	}
+
+	@PostMapping("/hello")
+	public RestResponse<Map<String, Object>> hello1(@RequestBody Map<String, Object> params) {
+
+		
+		
+		return RestResponse.ok(params);
 	}
 
 	@ApiOperation(value = "2 lang")
@@ -70,10 +79,10 @@ public class TestController {
 	// 发送消息方法
 	public void send() {
 
-		User user = new User(11L, "username", "password", "phone");
+		// User user = new User(11L, "username", "password", "phone");
 
-		kafKaProducerService.sendMessage("message" + System.currentTimeMillis());
-		kafKaProducerService.saveCreateUserLog(user);
+		// kafKaProducerService.sendMessage("message" + System.currentTimeMillis());
+		// kafKaProducerService.saveCreateUserLog(user);
 
 	}
 

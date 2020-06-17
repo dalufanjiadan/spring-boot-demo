@@ -11,7 +11,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+// @Service
 @Slf4j
 public class KafKaProducerService {
 
