@@ -2,13 +2,15 @@ package com.justdoit.demo.kafka;
 
 import com.justdoit.demo.model.User;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
-// @Service
+@Service
 @Slf4j
+@ConditionalOnProperty(value = "enable.kafka", havingValue = "true", matchIfMissing = false)
 public class KafKaConsumerService {
 
 	@KafkaListener(topics = "${kafka.topic.test}", groupId = "${kafka.consumer.groupId.test}")
