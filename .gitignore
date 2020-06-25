@@ -19,6 +19,10 @@ target/
 *.iml
 *.ipr
 
+
+/src/main/resources/static
+
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -29,3 +33,26 @@ build/
 
 ### VS Code ###
 .vscode/
+
+vue-demo/.DS_Store
+vue-demo/node_modules
+vue-demo/vue-demo/dist
+# local env files
+vue-demo/.env.local
+vue-demo/.env.*.local
+# Log files
+vue-demo/npm-debug.log*
+vue-demo/yarn-debug.log*
+vue-demo/yarn-error.log*
+vue-demo/pnpm-debug.log*
+# Editor directories and files
+vue-demo/.idea
+vue-demo/.vscode
+vue-demo/*.suo
+vue-demo/*.ntvs*
+vue-demo/*.njsproj
+vue-demo/*.sln
+vue-demo/*.sw?
+
+
+.DS_Store

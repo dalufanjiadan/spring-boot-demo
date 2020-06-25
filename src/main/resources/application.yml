@@ -55,6 +55,6 @@ kafka:
 
 
 enable:
-    security: true
+    security: false
     redis: false
     kafka: false
