@@ -23,7 +23,7 @@
 					<el-menu-item index="2-4-2">选项2</el-menu-item>
 					<el-menu-item index="2-4-3">选项3</el-menu-item>
 				</el-submenu>
-				<el-menu-item index="4" route="/about" id="about"> About</el-menu-item>
+				<el-menu-item index="4" route="/admin" id="admin"> Admin</el-menu-item>
 			</el-menu>
 		</el-header>
 		<el-main>
@@ -61,7 +61,7 @@ export default {
 </script>
 
 <style scoped>
-#about,
+#admin,
 #user {
 	float: right;
 }
