@@ -22,7 +22,7 @@
 					<el-menu-item index="2-4-3">选项3</el-menu-item>
 				</el-submenu>
 				<el-menu-item index="3" disabled>消息中心</el-menu-item>
-				<el-menu-item index="4" route="/about"> About</el-menu-item>
+				<el-menu-item index="4" route="/about" id="about"> About</el-menu-item>
 			</el-menu>
 		</el-header>
 		<el-main>
@@ -59,4 +59,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.el-menu #about {
+	float: right;
+}
+</style>
