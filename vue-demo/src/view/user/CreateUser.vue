@@ -1,66 +1,104 @@
 <template>
-	<el-table
-		:data="
-			tableData.filter(
-				(data) => !search || data.name.toLowerCase().includes(search.toLowerCase())
-			)
-		"
-		style="width: 100%"
+	<el-form
+		:model="ruleForm"
+		status-icon
+		:rules="rules"
+		ref="ruleForm"
+		label-width="100px"
+		class="demo-ruleForm"
+		id="createUserFrom"
 	>
-		<el-table-column label="Date" prop="date"> </el-table-column>
-		<el-table-column label="Name" prop="name"> </el-table-column>
-		<el-table-column align="right">
-			<template slot="header">
-				<el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
-			</template>
-			<template slot-scope="scope">
-				<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-				<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)"
-					>Delete</el-button
-				>
-			</template>
-		</el-table-column>
-	</el-table>
+		<el-form-item label="密码" prop="pass">
+			<el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+		</el-form-item>
+		<el-form-item label="确认密码" prop="checkPass">
+			<el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+		</el-form-item>
+		<el-form-item label="年龄" prop="age">
+			<el-input v-model.number="ruleForm.age"></el-input>
+		</el-form-item>
+		<el-form-item>
+			<el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+			<el-button @click="resetForm('ruleForm')">重置</el-button>
+		</el-form-item>
+	</el-form>
 </template>
 
 <script>
 export default {
 	data() {
+		var checkAge = (rule, value, callback) => {
+			if (!value) {
+				return callback(new Error("年龄不能为空"));
+			}
+			setTimeout(() => {
+				if (!Number.isInteger(value)) {
+					callback(new Error("请输入数字值"));
+				} else {
+					if (value < 18) {
+						callback(new Error("必须年满18岁"));
+					} else {
+						callback();
+					}
+				}
+			}, 1000);
+		};
+		var validatePass = (rule, value, callback) => {
+			if (value === "") {
+				callback(new Error("请输入密码"));
+			} else {
+				if (this.ruleForm.checkPass !== "") {
+					this.$refs.ruleForm.validateField("checkPass");
+				}
+				callback();
+			}
+		};
+		var validatePass2 = (rule, value, callback) => {
+			if (value === "") {
+				callback(new Error("请再次输入密码"));
+			} else if (value !== this.ruleForm.pass) {
+				callback(new Error("两次输入密码不一致!"));
+			} else {
+				callback();
+			}
+		};
 		return {
-			tableData: [
-				{
-					date: "2016-05-02",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1518 弄",
-				},
-				{
-					date: "2016-05-04",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1517 弄",
-				},
-				{
-					date: "2016-05-01",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1519 弄",
-				},
-				{
-					date: "2016-05-03",
-					name: "王小虎",
-					address: "上海市普陀区金沙江路 1516 弄",
-				},
-			],
-			search: "",
+			ruleForm: {
+				pass: "",
+				checkPass: "",
+				age: "",
+			},
+			rules: {
+				pass: [{ validator: validatePass, trigger: "blur" }],
+				checkPass: [{ validator: validatePass2, trigger: "blur" }],
+				age: [{ validator: checkAge, trigger: "blur" }],
+			},
 		};
 	},
 	methods: {
-		handleEdit(index, row) {
-			console.log(index, row);
-			
+		submitForm(formName) {
+			this.$refs[formName].validate((valid) => {
+				if (valid) {
+					alert("submit!");
+
+					console.log(this.ruleForm);
+
+					
+				} else {
+					console.log("error submit!!");
+					return false;
+				}
+			});
 		},
-		handleDelete(index, row) {
-			console.log(index, row);
-			this.tableData.splice(index,1);
+		resetForm(formName) {
+			this.$refs[formName].resetFields();
 		},
 	},
 };
 </script>
+<style scoped>
+#createUserFrom {
+	width: 500px;
+	margin: auto auto;
+}
+</style>
