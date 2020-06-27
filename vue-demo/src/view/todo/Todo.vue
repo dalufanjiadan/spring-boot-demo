@@ -11,7 +11,7 @@
 		<el-tabs :tab-position="'right'">
 			<el-tab-pane label="未完成">
 				<div
-					v-for="(taskItem, index) in taskItemListNotFinished"
+					v-for="(taskItem, index) in getNotFinished()"
 					:taskItem="taskItem"
 					:key="index"
 				>
@@ -40,9 +40,17 @@
 							></el-button>
 						</el-col>
 					</el-row>
-
 					<el-divider content-position="right"></el-divider>
 				</div>
+				<el-pagination
+					page-size="8"
+					layout="prev, pager, next"
+					:total="taskItemListNotFinished.length"
+					hide-on-single-page="true"
+					@current-change="pageChange"
+					:current-page.sync="currentPage"
+				>
+				</el-pagination>
 			</el-tab-pane>
 			<el-tab-pane label="已完成">
 				<div
@@ -133,6 +141,8 @@ export default {
 				finished: false,
 			},
 			// formLabelWidth: "120px",
+			currentPage: 1,
+			pageSize: 8,
 		};
 	},
 	created() {
@@ -145,6 +155,7 @@ export default {
 			this.taskItemListNotFinished.push(taskItem);
 		}
 		console.log(this.taskItemListNotFinished);
+		console.log(this.taskItemListNotFinished.length);
 	},
 	methods: {
 		createTaskItem() {
@@ -164,6 +175,22 @@ export default {
 		},
 		removeTask(index) {
 			this.taskItemListDeleted.splice(index, 1);
+		},
+		getNotFinished() {
+			let start = (this.currentPage - 1) * this.pageSize;
+			let end = start + this.pageSize;
+
+			let result = [];
+
+			for (let i = start; i < end && i < this.taskItemListNotFinished.length; i++) {
+				const element = this.taskItemListNotFinished[i];
+				result.push(this.taskItemListNotFinished[i]);
+			}
+			return result;
+		},
+		pageChange() {
+			console.log("--=====----");
+			console.log(this.currentPage);
 		},
 	},
 };
