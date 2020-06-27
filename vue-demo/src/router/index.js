@@ -10,6 +10,11 @@ const routes = [
 		component: () => import("../view/Home.vue"),
 	},
 	{
+		path: "/todo",
+		name: "todo",
+		component: () => import("../view/todo/Todo.vue"),
+	},
+	{
 		path: "/about",
 		name: "about",
 		component: () => import("../view/About.vue"),
@@ -38,7 +43,7 @@ const routes = [
 				path: "/admin-user-find",
 				name: "deleteUser",
 				component: () => import("../view/user/FindUser.vue"),
-			}
+			},
 		],
 	},
 ];

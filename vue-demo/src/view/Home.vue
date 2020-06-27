@@ -2,6 +2,8 @@
 	<div>
 		<h1>Home</h1>
 		<el-button type="primary" v-on:click="hello">test button</el-button>
+		<label>aaa</label>
+		<p>{{helloworld}}</p>
 		<div id="char1" style="width: 600px;height:400px;"></div>
 	</div>
 </template>
@@ -13,6 +15,7 @@ export default {
 		return {
 			activeIndex: "1",
 			activeIndex2: "1",
+			helloworld: "hello world",
 		};
 	},
 	methods: {
