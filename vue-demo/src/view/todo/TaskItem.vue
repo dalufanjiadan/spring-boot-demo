@@ -1,7 +1,9 @@
 <template>
 	<div>
-		<h3>{{ taskItem.createAt }}</h3>
-		<h3>{{ taskItem.text }}</h3>
+		<el-row :gutter="20">
+			<el-col :span="12"><div class="grid-content bg-purple">{{taskItem.text}}</div></el-col>
+			<el-col :span="12"><div class="grid-content bg-purple">{{taskItem.createAt}}</div></el-col>
+		</el-row>
 	</div>
 </template>
 

@@ -1,5 +1,11 @@
 <template>
 	<div>
+		<el-row :gutter="20">
+			<el-col :span="11"><span>todo</span></el-col>
+			<el-col :span="2"><el-divider direction="vertical"></el-divider></el-col>
+
+			<el-col :span="11"><span>finish</span></el-col>
+		</el-row>
 		<TaskItem
 			v-for="taskItem in taskItemList"
 			:taskItem="taskItem"
