@@ -10,6 +10,7 @@
 			>
 				<el-menu-item index="1" route="/Home"> Home</el-menu-item>
 				<el-menu-item index="2" route="/Todo"> Todo</el-menu-item>
+				<el-menu-item index="3" route="/Test"> Test</el-menu-item>
 				<el-menu-item index="4" disabled>消息中心</el-menu-item>
 				<el-submenu index="5" route="/about" id="user">
 					<template slot="title"
@@ -25,7 +26,7 @@
 			</el-menu>
 		</el-header>
 		<el-main>
-			<router-view />
+			<router-view :key="activeIndex" />
 		</el-main>
 		<!-- <el-footer id="main-footer">
 			©Copyright 2019
@@ -39,12 +40,25 @@ export default {
 	data() {
 		return {
 			activeIndex: "1",
-			activeIndex2: "1",
 		};
+	},
+	created() {
+		//在页面加载时读取sessionStorage里的状态信息
+		if (sessionStorage.getItem("activeIndex")) {
+			this.activeIndex = sessionStorage.getItem("activeIndex");
+		}
+
+		console.log(this.activeIndex);
+
+		//在页面刷新时将vuex里的信息保存到sessionStorage里
+		window.addEventListener("beforeunload", () => {
+			console.log(this.activeIndex);
+			sessionStorage.setItem("activeIndex", this.activeIndex);
+		});
 	},
 	methods: {
 		handleSelect(key, keyPath) {
-			console.log(key, keyPath);
+			this.activeIndex = keyPath[0];
 		},
 		hello() {
 			console.log("hello world11");

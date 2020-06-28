@@ -51,9 +51,11 @@ public class TestController {
 		return RestResponse.ok("hello world");
 	}
 
-	@PostMapping("/hello")
-	public RestResponse<Map<String, Object>> hello1(@RequestBody Map<String, Object> params) {
+	@GetMapping("/hello1")
+	public RestResponse<Map<String, Object>> hello1(@RequestParam Map<String, Object> params) {
 
+		
+		System.out.println(params);
 		
 		
 		return RestResponse.ok(params);

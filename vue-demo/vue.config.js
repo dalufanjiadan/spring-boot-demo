@@ -1,20 +1,13 @@
 const path = require("path");
 
+const port = 3000; // dev port
+
 module.exports = {
 	outputDir: path.resolve(__dirname, "../src/main/resources/static"),
+	devServer: {
+		port: port,
+	},
 	configureWebpack: {
 		devtool: "source-map",
-	},
-	css: {
-		// css预设器配置项
-		// loaderOptions: {
-		// 	postcss: {
-		// 		plugins: [
-		// 			require("postcss-px2rem")({
-		// 				remUnit: 100,
-		// 			}),
-		// 		],
-		// 	},
-		// },
 	},
 };
