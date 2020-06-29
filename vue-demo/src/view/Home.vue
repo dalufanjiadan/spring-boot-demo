@@ -10,12 +10,10 @@
 
 		<el-divider></el-divider>
 
-		people:{{ this.$store.getters.getPeople }}
-		<el-divider></el-divider>
-		length:{{ this.$store.getters.getPeopleLength }}
+		people:{{ getPeople }}
 		<el-divider></el-divider>
 		<el-input v-model="age" placeholder="请输入内容"></el-input>
-		{{ this.$store.getters.getPeopleByAge(28) }}
+		{{ getPeopleByAge(28) }}
 		<el-divider></el-divider>
 
 		<div id="char1" style="width: 600px;height:400px;"></div>
@@ -23,6 +21,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
 	name: "Home",
 	data() {
@@ -35,6 +34,7 @@ export default {
 		console.log(this.$store.state.count);
 	},
 	computed: {
+		...mapGetters("people", ["getPeople", "getPeopleByAge"]),
 		count() {
 			return this.$store.state.count;
 		},
