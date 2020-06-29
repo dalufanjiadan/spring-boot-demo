@@ -1,9 +1,23 @@
 <template>
 	<div>
 		<h1>Home</h1>
-		<el-button type="primary" v-on:click="hello">test button</el-button>
-		<label>aaa</label>
-		<p>{{helloworld}}</p>
+		<el-divider></el-divider>
+		<el-button type="primary" @click="add">+</el-button>
+		<el-button type="primary" @click="sub">-</el-button>
+		<el-button type="primary" @click="mul">*10</el-button>
+		<el-button type="primary" @click="div">/10</el-button>
+		count:{{ count }}
+
+		<el-divider></el-divider>
+
+		people:{{ this.$store.getters.getPeople }}
+		<el-divider></el-divider>
+		length:{{ this.$store.getters.getPeopleLength }}
+		<el-divider></el-divider>
+		<el-input v-model="age" placeholder="请输入内容"></el-input>
+		{{ this.$store.getters.getPeopleByAge(28) }}
+		<el-divider></el-divider>
+
 		<div id="char1" style="width: 600px;height:400px;"></div>
 	</div>
 </template>
@@ -14,13 +28,32 @@ export default {
 	data() {
 		return {
 			activeIndex: "1",
-			activeIndex2: "1",
-			helloworld: "hello world",
+			age: 10,
 		};
+	},
+	created() {
+		console.log(this.$store.state.count);
+	},
+	computed: {
+		count() {
+			return this.$store.state.count;
+		},
 	},
 	methods: {
 		handleSelect(key, keyPath) {
 			console.log(key, keyPath);
+		},
+		add() {
+			this.$store.commit("add");
+		},
+		sub() {
+			this.$store.commit("sub");
+		},
+		mul() {
+			this.$store.commit("mul");
+		},
+		div() {
+			this.$store.dispatch("div");
 		},
 		hello() {
 			console.log("hello world11");
