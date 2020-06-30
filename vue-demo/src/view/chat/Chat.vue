@@ -7,30 +7,19 @@
 						<el-input v-model="name"></el-input>
 					</el-form-item>
 				</el-form>
-				<!-- <el-row :gutter="0" type="flex" justify="space-between">
-					<el-col :span="18">
-						<el-input v-model="name"></el-input>
-					</el-col>
-					<el-col :span="6">
-						<el-button @click.prevent="removeDomain(domain)" id="sendBtn"
-							>发送</el-button
-						>
-					</el-col>
-				</el-row> -->
 			</div>
 			<el-divider></el-divider>
-			<Message v-for="(message, index) in messages" :key="index" :message="message"></Message>
+			<Message v-for="(message, index) in messages" :key="index" :message="message">
+			</Message>
 		</div>
 		<div id="footer">
 			<el-divider></el-divider>
 			<el-row :gutter="0">
 				<el-col :span="19">
-					<el-input v-model="name"></el-input>
+					<el-input v-model="messageText"></el-input>
 				</el-col>
 				<el-col :span="5">
-					<el-button @click.prevent="removeDomain(domain)" style="float:right"
-						>发送</el-button
-					>
+					<el-button @click="sendMessage()" style="float:right">发送</el-button>
 				</el-col>
 			</el-row>
 		</div>
@@ -48,6 +37,7 @@ export default {
 	data() {
 		return {
 			name: "nufasdfall",
+			messageText: null,
 			messages: [
 				{
 					name: "aa",
@@ -61,6 +51,21 @@ export default {
 				},
 			],
 		};
+	},
+	methods: {
+		sendMessage() {
+			let message = {
+				name: this.name,
+				message: this.messageText,
+				self: true,
+			};
+
+			// post
+
+			this.messages.push(message);
+
+			console.log(this.messages);
+		},
 	},
 };
 </script>
@@ -76,5 +81,6 @@ export default {
 }
 #content {
 	height: 600px;
+	overflow: auto;
 }
 </style>
