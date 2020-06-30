@@ -11,7 +11,7 @@
 				<el-menu-item index="1" route="/Home"> Home</el-menu-item>
 				<el-menu-item index="2" route="/Todo"> Todo</el-menu-item>
 				<el-menu-item index="3" route="/Test"> Test</el-menu-item>
-				<el-menu-item index="4" disabled>消息中心</el-menu-item>
+				<el-menu-item index="4" route="/Chat"> Chart</el-menu-item>
 				<el-submenu index="5" route="/about" id="user">
 					<template slot="title"
 						><el-avatar
