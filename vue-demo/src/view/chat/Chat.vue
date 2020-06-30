@@ -25,7 +25,8 @@
 		</div>
 	</div>
 </template>
-
+<script src="./js/sockjs-0.3.4.js"></script>
+<script src="./js/stomp.js"></script>
 <script>
 import Message from "./Message";
 
@@ -38,6 +39,7 @@ export default {
 		return {
 			name: "nufasdfall",
 			messageText: null,
+			stompClient: null,
 			messages: [
 				{
 					name: "aa",
@@ -52,11 +54,14 @@ export default {
 			],
 		};
 	},
+	created() {
+		this.connect();
+	},
 	methods: {
 		sendMessage() {
 			let message = {
-				name: this.name,
-				message: this.messageText,
+				from: this.name,
+				text: this.messageText,
 				self: true,
 			};
 
@@ -65,6 +70,50 @@ export default {
 			this.messages.push(message);
 
 			console.log(this.messages);
+
+			stompClient.send("/app/chat", {}, JSON.stringify(message));
+		},
+		setConnected(connected) {
+			document.getElementById("connect").disabled = connected;
+			document.getElementById("disconnect").disabled = !connected;
+			document.getElementById("conversationDiv").style.visibility = connected
+				? "visible"
+				: "hidden";
+			document.getElementById("response").innerHTML = "";
+		},
+		connect() {
+			console.log("-=-=");
+			let socket = new SockJS("/chat");
+			this.stompClient = Stomp.over(socket);
+			this.stompClient.connect({}, function(frame) {
+				// setConnected(true);
+				console.log("Connected: " + frame);
+				stompClient.subscribe("/topic/messages", function(messageOutput) {
+					showMessageOutput(JSON.parse(messageOutput.body));
+				});
+			});
+
+			console.log(this.stompClient);
+			console.log("-==12");
+		},
+		disconnect() {
+			if (stompClient != null) {
+				stompClient.disconnect();
+			}
+			setConnected(false);
+			console.log("Disconnected");
+		},
+
+		showMessageOutput(messageOutput) {
+			var response = document.getElementById("response");
+			var p = document.createElement("p");
+			p.style.wordWrap = "break-word";
+			p.appendChild(
+				document.createTextNode(
+					messageOutput.from + ": " + messageOutput.text + " (" + messageOutput.time + ")"
+				)
+			);
+			response.appendChild(p);
 		},
 	},
 };
