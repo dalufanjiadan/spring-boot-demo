@@ -20,7 +20,7 @@ export default {
 	props: ["condition"],
 	methods: {
 		onClick(item) {
-			console.log(item.label);
+			this.$store.commit("test/add", item);
 		},
 	},
 };

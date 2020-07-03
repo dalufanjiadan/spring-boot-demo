@@ -2,7 +2,7 @@ const test = {
 	namespaced: true,
 	//变量data
 	state: {
-		selected: [1, 2, 3],
+		selected: [],
 	},
 	//类似于计算属性computed
 	getters: {
@@ -12,12 +12,8 @@ const test = {
 	},
 	//方法methods
 	mutations: {
-		add1(state, item) {
-			console.log("--");
-			console.log(item);
+		add(state, item) {
 			state.selected.push(item);
-
-			console.log("--2");
 		},
 	},
 	//异步操作

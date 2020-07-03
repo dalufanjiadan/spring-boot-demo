@@ -20,21 +20,25 @@
 
 		<el-divider></el-divider>
 
-		<el-tag> {{ getSelected }}</el-tag>
-
-		{{ this.$store.state.test.selected }}
-		{{ this.$store.getters["test/selected"] }}
+		<SetCondition
+			v-for="(item, index) in this.$store.state.test.selected"
+			:condition="item"
+			:key="index"
+		>
+		</SetCondition>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import Condition from "./Condition";
+import SetCondition from "./SetCondition";
 
 export default {
 	name: "Test",
 	components: {
 		Condition,
+		SetCondition,
 	},
 	data() {
 		return {
@@ -106,11 +110,6 @@ export default {
 			});
 
 			console.log(this.$store.state.test.selected);
-
-			// this.$store.state.test.selected.push(4)
-
-			this.$store.commit("test/add1",5);
-			// this.add1(5);
 		},
 		onSelectChange() {
 			console.log(this.accountRoleDevice);
