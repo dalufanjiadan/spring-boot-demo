@@ -24,7 +24,8 @@
 			v-for="(item, index) in this.$store.state.test.selected"
 			:condition="item"
 			:key="index"
-		>
+			:index="index"
+		>	
 		</SetCondition>
 	</div>
 </template>
@@ -66,19 +67,37 @@ export default {
 							conditions: [
 								{
 									label: "登陆过的用户",
-									input: {
-										dateStart: null,
-										dateEnd: null,
-									},
+									input: [
+										{
+											label: "开始日期",
+											value: null,
+										},
+										{
+											label: "结束日期",
+											value: null,
+										},
+									],
 								},
 								{
 									label: "登陆过的用户,并且最高等级在a至b级的用户",
-									input: {
-										dateStart: null,
-										dateEnd: null,
-										a: null,
-										b: null,
-									},
+									input: [
+										{
+											label: "开始日期",
+											value: null,
+										},
+										{
+											label: "结束日期",
+											value: null,
+										},
+										{
+											label: "a",
+											value: null,
+										},
+										{
+											label: "b",
+											value: null,
+										},
+									],
 								},
 							],
 						},
