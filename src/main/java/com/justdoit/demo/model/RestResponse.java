@@ -2,6 +2,7 @@ package com.justdoit.demo.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -35,7 +36,9 @@ public class RestResponse<T> {
 	private Integer code;
 	private String message;
 	private T data;
-	private String timestamp = LocalDateTime.now().toString();
+
+    // @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime timestamp = LocalDateTime.now();
 
 	public static <T> RestResponse<T> ok() {
 		RestResponse<T> response = new RestResponse<>();
