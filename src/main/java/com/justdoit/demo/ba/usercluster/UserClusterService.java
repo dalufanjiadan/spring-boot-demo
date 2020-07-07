@@ -3,6 +3,7 @@ package com.justdoit.demo.ba.usercluster;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,18 +59,19 @@ public class UserClusterService {
 	public Object getFilterGroup2(Integer group2Id) {
 
 		List<Map<String, Object>> filterGroup2 = mapper.getFilterGroup2(group2Id);
+		Splitter splitter = Splitter.on(",").trimResults();
 
 		if (filterGroup2.size() > 0) {
 			Map<String, Object> result = new HashMap<>();
-			List<Map<String, Object>> filters = new ArrayList<>();
-			for (Map<String, Object> filter : filterGroup2) {
+			List<UserClusterFilter> filters = new ArrayList<>();
+			for (Map<String, Object> map : filterGroup2) {
 
-				Map<String, Object> map = new HashMap<>();
-				map.put("label", filter.get("filterName"));
-				map.put("paramsName", filter.get("params_name"));
-				map.put("paramsType", filter.get("params_type"));
-
-				filters.add(map);
+				UserClusterFilter filter = new UserClusterFilter();
+				filter.setName(map.get("filterName").toString());
+				filter.setParamsName(splitter.splitToList(map.get("params_name").toString()));
+				filter.setParamsType(splitter.splitToList(map.get("params_type").toString()));
+				filter.setSql(map.get("sql").toString());
+				filters.add(filter);
 			}
 
 			result.put("group2Name", filterGroup2.get(0).get("group2Name"));

@@ -17,7 +17,8 @@
 			t1.name as group2Name,
 			t2.name as filterName,
 			t2.params_name,
-			t2.params_type
+			t2.params_type,
+			t2.sql
 		FROM
 			user_cluster_filter_group_2 t1 INNER JOIN user_cluster_filter t2 ON t2.group_2_id = t1.id 
 		WHERE
