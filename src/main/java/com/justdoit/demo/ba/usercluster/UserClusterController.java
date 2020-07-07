@@ -5,6 +5,8 @@ import com.justdoit.demo.model.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,6 +49,8 @@ public class UserClusterController {
 	/**
 	 * 获取二级过滤的详细包含条件
 	 * 
+	 * 活跃用户/新增用户
+	 * 
 	 * @return
 	 */
 	@GetMapping("/filterGroup2/{group2Id}")
@@ -54,4 +58,16 @@ public class UserClusterController {
 
 		return RestResponse.ok(service.getFilterGroup2(group2Id));
 	}
+
+	/**
+	 * 新建用户分群
+	 * 
+	 * @return
+	 */
+	@PostMapping
+	public RestResponse<Object> createUserCluster(@RequestBody UserClusterRequest userClusterRequest) {
+
+		return RestResponse.ok(service.createUserCluster(userClusterRequest));
+	}
+
 }

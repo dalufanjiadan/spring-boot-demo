@@ -16,4 +16,6 @@ public interface UserClusterMapper {
 
 	List<Map<String, Object>> getFilterGroup2(int group2Id);
 
+	int insertUserCluster(UserCluster userCluster);
+
 }

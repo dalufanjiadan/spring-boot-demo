@@ -24,4 +24,13 @@
 		WHERE
 			t1.id = #{group2Id}
 	</select>
+
+	<insert id="insertUserCluster" parameterType="com.justdoit.demo.ba.usercluster.UserCluster">
+		INsert into 
+			user_cluster(`username`, `name`, `type`, `filters`, `sql`, `result`, `size`)
+		values
+			(#{username}, #{name}, #{type}, #{filters}, #{sql}, #{result}, #{size});
+
+	</insert>
+
 </mapper>
