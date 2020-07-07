@@ -32,9 +32,7 @@ public class UserClusterService {
 		Map<String, List<Map<String, Object>>> dataGrouped = data.stream()
 				.collect(groupingBy(map -> map.get("group1Name").toString()));
 
-		System.out.println(dataGrouped);
 		// 构造result
-
 		List<Map<String, Object>> result = new ArrayList<>();
 		// 按照特定顺序返回
 		List<String> group1Names = new ArrayList<>(Arrays.asList("登陆类", "付费类", "用户属性"));
@@ -55,6 +53,31 @@ public class UserClusterService {
 		}
 
 		return result;
+	}
+
+	public Object getFilterGroup2(Integer group2Id) {
+
+		List<Map<String, Object>> filterGroup2 = mapper.getFilterGroup2(group2Id);
+
+		if (filterGroup2.size() > 0) {
+			Map<String, Object> result = new HashMap<>();
+			List<Map<String, Object>> filters = new ArrayList<>();
+			for (Map<String, Object> filter : filterGroup2) {
+
+				Map<String, Object> map = new HashMap<>();
+				map.put("label", filter.get("filterName"));
+				map.put("paramsName", filter.get("params_name"));
+				map.put("paramsType", filter.get("params_type"));
+
+				filters.add(map);
+			}
+
+			result.put("group2Name", filterGroup2.get(0).get("group2Name"));
+			result.put("filters", filters);
+			return result;
+		}
+
+		return null;
 	}
 
 }

@@ -4,6 +4,7 @@ import com.justdoit.demo.model.RestResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +33,6 @@ public class UserClusterController {
 		return RestResponse.ok(service.getUserClusterTypes());
 	}
 
-
 	/**
 	 * 过滤条件两级分组
 	 * 
@@ -42,5 +42,16 @@ public class UserClusterController {
 	public RestResponse<Object> getFilterGroup12() {
 
 		return RestResponse.ok(service.getFilterGroup12());
+	}
+
+	/**
+	 * 获取二级过滤的详细包含条件
+	 * 
+	 * @return
+	 */
+	@GetMapping("/filterGroup2/{group2Id}")
+	public RestResponse<Object> getFilterGroup2(@PathVariable Integer group2Id) {
+
+		return RestResponse.ok(service.getFilterGroup2(group2Id));
 	}
 }

@@ -11,4 +11,16 @@
 		FROM
 			user_cluster_filter_group_1 t1 INNER JOIN user_cluster_filter_group_2 t2 ON t2.group_1_id = t1.id 
 	</select>
+
+	<select id="getFilterGroup2" parameterType="int" resultType="java.util.Map">
+		SELECT
+			t1.name as group2Name,
+			t2.name as filterName,
+			t2.params_name,
+			t2.params_type
+		FROM
+			user_cluster_filter_group_2 t1 INNER JOIN user_cluster_filter t2 ON t2.group_2_id = t1.id 
+		WHERE
+			t1.id = #{group2Id}
+	</select>
 </mapper>
