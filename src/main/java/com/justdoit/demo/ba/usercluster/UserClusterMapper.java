@@ -12,4 +12,6 @@ public interface UserClusterMapper {
 	@Select("SELECT id as value, name as label FROM user_cluster_filter_group_1")
 	List<Map<String, Object>> getUserClusterTypes();
 
+	List<Map<String, Object>> getFilterGroup12();
+
 }

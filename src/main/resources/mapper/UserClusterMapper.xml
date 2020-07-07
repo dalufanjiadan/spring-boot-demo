@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.justdoit.demo.ba.usercluster.UserClusterMapper">
+
+	<select id="getFilterGroup12" resultType="java.util.Map">
+		SELECT
+			t1.id as group1Id,
+			t1.name as group1Name,
+			t2.id as group2Id,
+			t2.name as group2Name
+		FROM
+			user_cluster_filter_group_1 t1 INNER JOIN user_cluster_filter_group_2 t2 ON t2.group_1_id = t1.id 
+	</select>
+</mapper>

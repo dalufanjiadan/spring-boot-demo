@@ -31,4 +31,16 @@ public class UserClusterController {
 
 		return RestResponse.ok(service.getUserClusterTypes());
 	}
+
+
+	/**
+	 * 过滤条件两级分组
+	 * 
+	 * @return
+	 */
+	@GetMapping("/filterGroup12")
+	public RestResponse<Object> getFilterGroup12() {
+
+		return RestResponse.ok(service.getFilterGroup12());
+	}
 }
