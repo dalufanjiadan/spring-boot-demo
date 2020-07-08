@@ -76,9 +76,9 @@ VALUES
 	(
 		'dateStart至dateEnd登陆过的用户,并且当前最高等级在a至b级的用户',
 		'3',
-		'dateStart,dateEnd,a,b',
+		'dateStart,dateEnd,aaa,bbb',
 		'string,string,int,int',
-		'date BETWEEN dateStart AND dateEnd AND level BETWEEN a AND b'
+		'date BETWEEN dateStart AND dateEnd AND level BETWEEN aaa AND bbb'
 	);
 
 CREATE TABLE `user_cluster`(
@@ -88,6 +88,7 @@ CREATE TABLE `user_cluster`(
 	`type` tinyint NOT NULL COMMENT '账号/角色/设备，0/1/2',
 	`filters` text NOT NULL COMMENT '该人群所有过滤条件',
 	`sql` text NOT NULL COMMENT '该人群的最终查询SQL',
+	`status` tinyint NOT NULL COMMENT '该人群的的计算状态 查询中/查询完成 0/1',
 	`result` text NOT NULL COMMENT '该人群的最终查询结果',
 	`size` bigint(20) NOT NULL COMMENT '该人群的大小',
 	`created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '创建时间',
