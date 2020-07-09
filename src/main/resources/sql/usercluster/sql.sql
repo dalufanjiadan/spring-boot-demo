@@ -87,14 +87,13 @@ CREATE TABLE `user_cluster`(
 	`name` varchar(250) NOT NULL COMMENT '人群名称',
 	`type` tinyint NOT NULL COMMENT '账号/角色/设备，0/1/2',
 	`filters` text NOT NULL COMMENT '该人群所有过滤条件',
+	`set_operation` varchar(20) NOT NULL COMMENT '集合操作',
+	`share_with` varchar(255)  NULL COMMENT '分享，他人可见',
 	`sql` text NOT NULL COMMENT '该人群的最终查询SQL',
 	`status` tinyint NOT NULL COMMENT '该人群的的计算状态 查询中/查询完成 0/1',
 	`result` text NOT NULL COMMENT '该人群的最终查询结果',
 	`size` bigint(20) NOT NULL COMMENT '该人群的大小',
-	`created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '创建时间',
-	`updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '更新时间',
-	`deleted_at` datetime(6) DEFAULT NULL COMMENT '删除时间',
-	`created_by` VARCHAR (250) DEFAULT NULL COMMENT '创建用户',
-	`updated_by` VARCHAR (250) DEFAULT NULL COMMENT '更新用户',
-	`deleted_by` VARCHAR (250) DEFAULT NULL COMMENT '删除用户'
+	`created_at` varchar(20) DEFAULT NULL COMMENT '创建时间',
+	`updated_at` varchar(20) DEFAULT NULL COMMENT '更新时间',
+	`deleted_at` varchar(20) DEFAULT NULL COMMENT '删除时间'
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
