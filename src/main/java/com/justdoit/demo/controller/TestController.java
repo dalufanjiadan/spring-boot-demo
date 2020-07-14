@@ -1,7 +1,13 @@
 package com.justdoit.demo.controller;
 
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.IntStream;
 
 import javax.validation.Valid;
 
@@ -9,7 +15,9 @@ import com.justdoit.demo.kafka.KafKaProducerService;
 import com.justdoit.demo.mapper.UserMapper;
 import com.justdoit.demo.model.RestResponse;
 import com.justdoit.demo.model.User;
+import com.justdoit.demo.util.DbCloudUtil;
 
+import org.checkerframework.checker.units.qual.s;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -47,17 +55,29 @@ public class TestController {
 	@GetMapping("/hello")
 	public RestResponse<String> hello() {
 
-		send();
+		String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds limit 5";
+
+		sql = sql.replaceAll("\n", " ");
+		sql = sql.replaceAll("\t", " ");
+
+		System.out.println(sql);
+
+		String taskId = DbCloudUtil.doQueryAsync(sql);
+
+		System.out.println(taskId);
+
+		// return DbCloudUtil.saveToTable(taskId);
+
+		// return "hello world";
+
 		return RestResponse.ok("hello world");
 	}
 
 	@GetMapping("/hello1")
 	public RestResponse<Map<String, Object>> hello1(@RequestParam Map<String, Object> params) {
 
-		
 		System.out.println(params);
-		
-		
+
 		return RestResponse.ok(params);
 	}
 

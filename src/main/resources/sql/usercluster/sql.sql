@@ -85,6 +85,7 @@ CREATE TABLE `user_cluster`(
 	`id` bigint(20) AUTO_INCREMENT PRIMARY KEY,
 	`username` varchar(250) NOT NULL COMMENT '用户',
 	`name` varchar(250) NOT NULL COMMENT '人群名称',
+	`description` text DEFAULT NULL COMMENT '人群描述',
 	`type` tinyint NOT NULL COMMENT '账号/角色/设备，0/1/2',
 	`filters` text NOT NULL COMMENT '该人群所有过滤条件',
 	`set_operation` varchar(20) NOT NULL COMMENT '集合操作',
@@ -93,7 +94,7 @@ CREATE TABLE `user_cluster`(
 	`status` tinyint NOT NULL COMMENT '该人群的的计算状态 查询中/查询完成 0/1',
 	`result` text NOT NULL COMMENT '该人群的最终查询结果',
 	`size` bigint(20) NOT NULL COMMENT '该人群的大小',
-	`created_at` varchar(20) DEFAULT NULL COMMENT '创建时间',
-	`updated_at` varchar(20) DEFAULT NULL COMMENT '更新时间',
-	`deleted_at` varchar(20) DEFAULT NULL COMMENT '删除时间'
+	`created_at` varchar(19) DEFAULT NULL COMMENT '创建时间',
+	`updated_at` varchar(19) DEFAULT NULL COMMENT '更新时间',
+	`deleted_at` varchar(19) DEFAULT NULL COMMENT '删除时间'
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;

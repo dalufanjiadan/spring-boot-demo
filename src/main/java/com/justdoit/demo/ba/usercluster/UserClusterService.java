@@ -139,6 +139,15 @@ public class UserClusterService {
 		// 用type来区分表
 		if (0 == type) {
 			field = "account_id";
+			
+
+
+
+
+
+
+
+
 			tableName = "dm_gamelog_account_ds";
 		} else if (1 == type) {
 			field = "role_id";
