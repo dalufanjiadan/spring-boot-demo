@@ -117,32 +117,54 @@ public class DbCloudUtil {
 		// uri = "/hive/uploadTmpTable";
 		// map.clear();
 
-		map.clear();
+		String dbName = "user_cluster";
+		String tableName = "taskId";
 
+		StringBuilder sb = new StringBuilder();
+		sb.append("CREATE EXTERNAL " + tableName + "(`id` String COMMENT '账号/角色/设备id')\n");
+		sb.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY '\\t'\n");
+		sb.append("LINES TERMINATED BY '\\n'\n");
+		sb.append("STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat'\n");
+		sb.append("OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'\n");
+		sb.append("LOCATION 'hdfs:///user/hive/warehouse/" + dbName + ".db/" + tableName + "'");
+
+		String hive_sql = "CREATE EXTERNAL TABLE user_device_tmp2(" + "`device_id` String COMMENT '设备id') "
+				+ "ROW FORMAT DELIMITED " + "  FIELDS TERMINATED BY '\t' " + "  LINES TERMINATED BY '\n' "
+				+ "STORED AS INPUTFORMAT " + "  'org.apache.hadoop.mapred.TextInputFormat' " + "OUTPUTFORMAT"
+				+ "  'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat' " + "LOCATION "
+				+ " 'hdfs:///user/hive/warehouse/db_temp.db/user_device_tmp2'";
+
+		String sql = "";
+		sql = hive_sql.replaceAll("user_device_tmp2", "taskId");
+
+		System.out.println(sql);
+
+		map.clear();
+		map.put("_key", KEY);
 		map.put("client_id", CLIENT_ID);
-		map.put("sql", CLIENT_ID);
+		// map.put("db_name", "db_temp");
+		map.put("sql", sql);
 		map.put("task_id", taskId);
 		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 		map.put("timestamp", timestamp);
 		map.put("user_name", USERNAME);
+
+		System.out.println(mapToString(map));
+		
+		
 		map.put("_sign", md5(mapToString(map)));
 
-		String url = URL + "/hive/uploadTmpTable" + "?" + mapToString(map);
-		// // db_namestring是数据库名称
-		// // sqlstring是上创建表的sql语句
-		// // task_idstring是被创建表查询的task_id
-		// // timestamplong是当前时间戳
-		// // _signstring是md5签名
-		// // user_namestring是用户域账户
+		try {
+			sql = URLEncoder.encode(sql, "UTF-8");
+			map.put("sql", sql);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 
-		System.out.println(url);
-		// Map response = doPost(url, null);
+		String url = URL + "/hive/uploadTmpTable" + "?" + mapToString(map);
 		doPostRequest(url);
 
-		// System.out.println(response);
-
 		return null;
-
 	}
 
 	/**
