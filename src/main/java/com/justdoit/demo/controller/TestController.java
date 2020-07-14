@@ -55,7 +55,7 @@ public class TestController {
 	@GetMapping("/hello")
 	public RestResponse<String> hello() {
 
-		String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds limit 5";
+		String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds where 1=1 limit 5";
 
 		sql = sql.replaceAll("\n", " ");
 		sql = sql.replaceAll("\t", " ");

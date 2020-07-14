@@ -1,8 +1,13 @@
 package com.justdoit.demo.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashMap;
@@ -44,25 +49,72 @@ public class DbCloudUtil {
 		map.put("user_name", USERNAME);
 		map.put("sql", sql);
 		map.put("timestamp", timestamp);
-		map.put("_sign", md5(mapToString(map)));
+		// // map.put("_sign", md5(mapToString(map)));
 
-		map.remove("_key");
+		// String sign = md5(mapToString(map));
+
+		// try {
+		// sql = URLEncoder.encode(sql, "UTF-8");
+		// map.put("sql", sql);
+		// } catch (UnsupportedEncodingException e) {
+		// e.printStackTrace();
+		// }
+		// map.remove("_key");
+		// map.remove("sql");
+		// map.remove("sql");
+
+		// System.out.println("==");
+		// System.out.println(mapToString(map));
+		// System.out.println("==");
+
+		// String url = URL + uri + "?" + mapToString(map);
+		// System.out.println(url);
+
+		// JsonNode response = doPost(url, mapToString(map));
+
+		// System.out.println(response);
+
+		StringBuilder sb = new StringBuilder();
+		StringBuilder rq = new StringBuilder();
+
+		int i = 0;
+		for (String key : map.keySet()) {
+			sb.append(key);
+			sb.append("=");
+			sb.append(map.get(key));
+			if (i < map.keySet().size() - 1) {
+				sb.append("&");
+			}
+			if (!key.equals("_key") && !key.equals("sql")) {
+				rq.append(key);
+				rq.append("=");
+				rq.append(map.get(key));
+				rq.append("&");
+			}
+			i++;
+		}
+		System.out.println(sb.toString());
+		String sign = md5(sb.toString());
 		try {
-			map.put("sql", URLEncoder.encode(sql, "UTF-8"));
-
-			System.out.println(URLEncoder.encode(sql, "UTF-8"));
-
+			sql = URLEncoder.encode(sql, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		String url = URL + uri + "?" + mapToString(map);
-		System.out.println(url);
+		// System.out.println("sign:"+sign);
+		// System.out.println("timestamp:"+timestamp);
+		// System.out.println("presto_sql:"+presto_sql);
+		rq.append("sql=" + sql);
+		rq.append("&_sign=" + sign);
+		String url = URL + uri + "?" + rq.toString();
+		System.err.println(url);
 
-		JsonNode response = doPost(url, mapToString(map));
+		
+		System.out.println("----------");
+		doPostRequest(url);
+		System.out.println("----------");
 
-		System.out.println(response);
-
-		return response.get("data").get("task_id").asText();
+		// return response.get("data").get("task_id").asText();
+		return null;
 	}
 
 	/**
@@ -141,6 +193,41 @@ public class DbCloudUtil {
 			return null;
 		}
 	}
+
+	private static void doPostRequest(String url){
+		URL obj;
+		try {
+		  obj = new URL(url);
+			  HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+	
+			  //默认值GET
+			  con.setRequestMethod("POST");
+	
+			  //添加请求头
+			  con.setRequestProperty("Content-Type", "application/json");
+	
+			  int responseCode = con.getResponseCode();
+			  System.out.println("Sending 'POST' request to URL : " + url);
+			  System.out.println("Response Code : " + responseCode);
+	
+			  BufferedReader in = new BufferedReader(
+					  new InputStreamReader(con.getInputStream()));
+			  String inputLine;
+			  StringBuffer response = new StringBuffer();
+	
+			  while ((inputLine = in.readLine()) != null) {
+				  response.append(inputLine);
+			  }
+			  in.close();
+	
+			  //打印结果
+			  System.out.println(response.toString());
+		} catch (MalformedURLException e) {
+		  e.printStackTrace();
+		} catch (IOException e) {
+		  e.printStackTrace();
+		}     
+	  }
 
 	private static String mapToString(Map<String, String> map) {
 		return map.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue())
