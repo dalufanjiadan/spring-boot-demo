@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -49,72 +51,21 @@ public class DbCloudUtil {
 		map.put("user_name", USERNAME);
 		map.put("sql", sql);
 		map.put("timestamp", timestamp);
-		// // map.put("_sign", md5(mapToString(map)));
+		map.put("_sign", md5(mapToString(map)));
 
-		// String sign = md5(mapToString(map));
-
-		// try {
-		// sql = URLEncoder.encode(sql, "UTF-8");
-		// map.put("sql", sql);
-		// } catch (UnsupportedEncodingException e) {
-		// e.printStackTrace();
-		// }
-		// map.remove("_key");
-		// map.remove("sql");
-		// map.remove("sql");
-
-		// System.out.println("==");
-		// System.out.println(mapToString(map));
-		// System.out.println("==");
-
-		// String url = URL + uri + "?" + mapToString(map);
-		// System.out.println(url);
-
-		// JsonNode response = doPost(url, mapToString(map));
-
-		// System.out.println(response);
-
-		StringBuilder sb = new StringBuilder();
-		StringBuilder rq = new StringBuilder();
-
-		int i = 0;
-		for (String key : map.keySet()) {
-			sb.append(key);
-			sb.append("=");
-			sb.append(map.get(key));
-			if (i < map.keySet().size() - 1) {
-				sb.append("&");
-			}
-			if (!key.equals("_key") && !key.equals("sql")) {
-				rq.append(key);
-				rq.append("=");
-				rq.append(map.get(key));
-				rq.append("&");
-			}
-			i++;
-		}
-		System.out.println(sb.toString());
-		String sign = md5(sb.toString());
 		try {
 			sql = URLEncoder.encode(sql, "UTF-8");
+			map.put("sql", sql);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		// System.out.println("sign:"+sign);
-		// System.out.println("timestamp:"+timestamp);
-		// System.out.println("presto_sql:"+presto_sql);
-		rq.append("sql=" + sql);
-		rq.append("&_sign=" + sign);
-		String url = URL + uri + "?" + rq.toString();
-		System.err.println(url);
+		map.remove("_key");
 
-		
-		System.out.println("----------");
-		doPostRequest(url);
-		System.out.println("----------");
+		String url = URL + uri + "?" + mapToString(map);
 
-		// return response.get("data").get("task_id").asText();
-		return null;
+		JsonNode response = doPost(url, null);
+
+		return response.get("data").get("task_id").asText();
 	}
 
 	/**
@@ -179,55 +130,63 @@ public class DbCloudUtil {
 	 */
 	private static JsonNode doPost(String url, Object body) {
 
+		URI uri = null;
+		try {
+			uri = new URI(url);
+		} catch (URISyntaxException e1) {
+			System.out.println(e1);
+		}
+
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Object> entity = new HttpEntity<Object>(body, headers);
-		ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+		ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
 
 		ObjectMapper om = new ObjectMapper();
 
 		try {
 			return om.readTree(responseEntity.getBody());
 		} catch (IOException e) {
-			return null;
+			System.out.println(e);
 		}
+
+		return null;
 	}
 
-	private static void doPostRequest(String url){
+	private static void doPostRequest(String url) {
 		URL obj;
 		try {
-		  obj = new URL(url);
-			  HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-	
-			  //默认值GET
-			  con.setRequestMethod("POST");
-	
-			  //添加请求头
-			  con.setRequestProperty("Content-Type", "application/json");
-	
-			  int responseCode = con.getResponseCode();
-			  System.out.println("Sending 'POST' request to URL : " + url);
-			  System.out.println("Response Code : " + responseCode);
-	
-			  BufferedReader in = new BufferedReader(
-					  new InputStreamReader(con.getInputStream()));
-			  String inputLine;
-			  StringBuffer response = new StringBuffer();
-	
-			  while ((inputLine = in.readLine()) != null) {
-				  response.append(inputLine);
-			  }
-			  in.close();
-	
-			  //打印结果
-			  System.out.println(response.toString());
+			obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+			// 默认值GET
+			con.setRequestMethod("POST");
+
+			// 添加请求头
+			con.setRequestProperty("Content-Type", "application/json");
+
+			int responseCode = con.getResponseCode();
+			System.out.println("Sending 'POST' request to URL : " + url);
+			System.out.println("Response Code : " + responseCode);
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			// 打印结果
+			System.out.println(response.toString());
 		} catch (MalformedURLException e) {
-		  e.printStackTrace();
+			e.printStackTrace();
 		} catch (IOException e) {
-		  e.printStackTrace();
-		}     
-	  }
+			e.printStackTrace();
+		}
+	}
 
 	private static String mapToString(Map<String, String> map) {
 		return map.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue())
@@ -235,9 +194,6 @@ public class DbCloudUtil {
 	}
 
 	private static String md5(String sourceStr) {
-
-		System.out.println("sourceStr: " + sourceStr);
-
 		String result = "";
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -257,9 +213,6 @@ public class DbCloudUtil {
 		} catch (NoSuchAlgorithmException e) {
 			System.out.println("NoSuchAlgorithmException:" + e);
 		}
-
-		System.out.println("md5 result: " + result);
-
 		return result;
 	}
 
