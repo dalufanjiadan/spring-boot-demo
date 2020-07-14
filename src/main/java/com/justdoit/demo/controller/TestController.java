@@ -57,9 +57,9 @@ public class TestController {
 
 
 
-		String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds where game_id=360 limit 5";
+		String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds where game_id=360 limit 8";
 
-		sql="SELECT account FROM 	data_analyze_label.dm_label_gamelog_kpi_account_ds WHERE 	game_id = 94 	AND ds = '20200510' 	AND last_login_date > '2020-05-01' UNION SELECT 	account FROM 	data_analyze_label.dm_label_gamelog_kpi_account_ds WHERE 	game_id = 360 	AND ds = '20200510' 	AND last_login_date > '2020-05-01'"; 		
+		// sql="SELECT account FROM 	data_analyze_label.dm_label_gamelog_kpi_account_ds WHERE 	game_id = 360 	AND ds = '20200510' 	AND last_login_date > '2020-05-01' UNION SELECT 	account FROM 	data_analyze_label.dm_label_gamelog_kpi_account_ds WHERE 	game_id = 360 	AND ds = '20200510' 	AND last_login_date > '2020-05-01'"; 		
 		sql = sql.replaceAll("\n", " ");
 		sql = sql.replaceAll("\t", " ");
 

@@ -77,40 +77,41 @@ public class DbCloudUtil {
 	public static Object saveToTable(String taskId) {
 		// 根据task_id 查询任务状态
 		String uri = "/task/getTaskBySerialNo";
-		boolean status = false;
+		int count = 10;
 
 		System.out.println(taskId);
 
-		LinkedHashMap<String, String> map = new LinkedHashMap<>();
+		TreeMap<String, String> map = new TreeMap<>();
 		map.put("_key", KEY);
 		map.put("client_id", CLIENT_ID);
 		map.put("serial_no", taskId);
 
-		while (status == false) {
-
+		while (count > 0) {
+			map.remove("_sign");
 			String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 			map.put("timestamp", timestamp);
 			map.put("_sign", md5(mapToString(map)));
 			String url = URL + uri + "?" + mapToString(map);
-
-			System.out.println(url);
-
 			Map response = doPost(url, null);
-			return response;
-			// System.out.println("成功".equals(response.get("data").get("jobs").get("status")));
+			String s = ((Map) ((Map) response.get("data")).get("jobs")).get("status").toString();
 
-			// if (status == true) {
-
-			// } else {
-			// try {
-			// Thread.currentThread().sleep(60 * 1000);
-			// } catch (InterruptedException e) {
-			// e.printStackTrace();
-			// }
-			// }
+			if ("成功".equals(s)) {
+				// bl = true;
+				System.out.println(s);
+				break;
+			} else {
+				count--;
+				System.out.println(s);
+				try {
+					Thread.sleep(2 * 1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 
 			// break;
 		}
+		System.out.println("over");
 
 		// // 状态完成生成临时表
 		// uri = "/hive/uploadTmpTable";
