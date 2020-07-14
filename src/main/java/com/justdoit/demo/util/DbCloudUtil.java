@@ -117,13 +117,29 @@ public class DbCloudUtil {
 		// uri = "/hive/uploadTmpTable";
 		// map.clear();
 
-		// // client_idint是客户端编号，向数据中心申请分配
+		map.clear();
+
+		map.put("client_id", CLIENT_ID);
+		map.put("sql", CLIENT_ID);
+		map.put("task_id", taskId);
+		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+		map.put("timestamp", timestamp);
+		map.put("user_name", USERNAME);
+		map.put("_sign", md5(mapToString(map)));
+
+		String url = URL + "/hive/uploadTmpTable" + "?" + mapToString(map);
 		// // db_namestring是数据库名称
 		// // sqlstring是上创建表的sql语句
 		// // task_idstring是被创建表查询的task_id
 		// // timestamplong是当前时间戳
 		// // _signstring是md5签名
 		// // user_namestring是用户域账户
+
+		System.out.println(url);
+		// Map response = doPost(url, null);
+		doPostRequest(url);
+
+		// System.out.println(response);
 
 		return null;
 
@@ -145,6 +161,7 @@ public class DbCloudUtil {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
+
 		HttpEntity<Object> entity = new HttpEntity<Object>(body, headers);
 		ResponseEntity<Map> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, entity, Map.class);
 
@@ -186,6 +203,17 @@ public class DbCloudUtil {
 
 			// 打印结果
 			System.out.println(response.toString());
+
+			ObjectMapper om = new ObjectMapper();
+
+			try {
+				JsonNode json = om.readTree(response.toString());
+				System.out.println(json);
+				System.out.println(json.get("return_comment"));
+			} catch (IOException e) {
+				System.out.println(e);
+			}
+
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
