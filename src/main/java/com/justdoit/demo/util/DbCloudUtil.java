@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.justdoit.demo.model.RestResponse;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -34,7 +35,7 @@ import org.springframework.web.client.RestTemplate;
 public class DbCloudUtil {
 
 	private final static String USERNAME = "dbcloud_ba01";
-	private final static String URL = "http://dbcloud.youzu.com/dc-flash-server";
+	private final static String BASE_URL = "http://dbcloud.youzu.com/dc-flash-server";
 	private final static String KEY = "96a53de9775eba7ed0d9eff646ef472d";
 	private final static String CLIENT_ID = "3";
 
@@ -44,15 +45,13 @@ public class DbCloudUtil {
 	 * @return
 	 */
 	public static String doQueryAsync(String sql) {
-		String uri = "/presto/submitExecuteJob";
-
-		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 
 		TreeMap<String, String> map = new TreeMap<>();
 		map.put("_key", KEY);
 		map.put("client_id", CLIENT_ID);
 		map.put("user_name", USERNAME);
 		map.put("sql", sql);
+		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 		map.put("timestamp", timestamp);
 		map.put("_sign", md5(mapToString(map)));
 
@@ -64,23 +63,18 @@ public class DbCloudUtil {
 		}
 		map.remove("_key");
 
-		String url = URL + uri + "?" + mapToString(map);
+		String url = BASE_URL + "/presto/submitExecuteJob" + "?" + mapToString(map);
+		JsonNode response = doPostRequest(url);
 
-		Map response = doPost(url, null);
-
-		return ((Map) response.get("data")).get("task_id").toString();
+		return response.get("data").get("task_id").asText();
 	}
 
 	/**
 	 * 根据task_id 查询结束后存到临时表
 	 */
 	public static Object saveToTable(String taskId) {
-		// 根据task_id 查询任务状态
-		String uri = "/task/getTaskBySerialNo";
+		// 最多睡眠十次
 		int count = 10;
-
-		System.out.println(taskId);
-
 		TreeMap<String, String> map = new TreeMap<>();
 		map.put("_key", KEY);
 		map.put("client_id", CLIENT_ID);
@@ -91,45 +85,45 @@ public class DbCloudUtil {
 			String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 			map.put("timestamp", timestamp);
 			map.put("_sign", md5(mapToString(map)));
-			String url = URL + uri + "?" + mapToString(map);
-			Map response = doPost(url, null);
-			String s = ((Map) ((Map) response.get("data")).get("jobs")).get("status").toString();
+			// 查看task_id 的运行状态，完成后存到临时表
+			String url = BASE_URL + "/task/getTaskBySerialNo" + "?" + mapToString(map);
+			JsonNode response = doPostRequest(url);
+			String status = response.get("data").get("jobs").get("status").asText();
 
-			if ("成功".equals(s)) {
-				// bl = true;
-				System.out.println(s);
+			System.out.println(status);
+			if ("成功".equals(status)) {
 				break;
 			} else {
 				count--;
-				System.out.println(s);
 				try {
-					Thread.sleep(2 * 1000);
+					Thread.sleep(5 * 1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-
-			// break;
 		}
 		System.out.println("over");
 
-		// // 状态完成生成临时表
-		// uri = "/hive/uploadTmpTable";
-		// map.clear();
+		uploadTmpTable(taskId);
+
+		return RestResponse.ok();
+	}
+
+	private static void uploadTmpTable(String taskId) {
 
 		String dbName = "db_temp";
 		String tableName = taskId.replaceAll("-", "_");
 
-		String hive_sql = "CREATE EXTERNAL TABLE tableName(" + "`device_id` String COMMENT '设备id') "
+		String sql = "CREATE EXTERNAL TABLE tableName(" + "`device_id` String COMMENT '设备id') "
 				+ "ROW FORMAT DELIMITED " + "  FIELDS TERMINATED BY '\t' " + "  LINES TERMINATED BY '\n' "
 				+ "STORED AS INPUTFORMAT " + "  'org.apache.hadoop.mapred.TextInputFormat' " + "OUTPUTFORMAT"
 				+ "  'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat' " + "LOCATION "
 				+ " 'hdfs:///user/hive/warehouse/dbName.db/tableName'";
 
-		String sql = hive_sql.replaceAll("tableName", tableName);
-		sql = hive_sql.replaceAll("dbName", dbName);
+		sql = sql.replaceAll("tableName", tableName);
+		sql = sql.replaceAll("dbName", dbName);
 
-		map.clear();
+		TreeMap<String, String> map = new TreeMap<>();
 		map.put("_key", KEY);
 		map.put("client_id", CLIENT_ID);
 		map.put("sql", sql);
@@ -146,30 +140,106 @@ public class DbCloudUtil {
 			e.printStackTrace();
 		}
 
-		String url = URL + "/hive/uploadTmpTable" + "?" + mapToString(map);
+		String url = BASE_URL + "/hive/uploadTmpTable" + "?" + mapToString(map);
 		doPostRequest(url);
 
-		// 刷新元数据？
-		uri = "/hive/meta/resfreshTableMeta";
+		// 刷新
+		resfreshTableMeta(dbName, tableName);
+	}
+
+	/**
+	 * 刷新元数据
+	 * 
+	 * 建表不一定立即生效
+	 */
+	private static void resfreshTableMeta(String dbName, String tableName) {
+		TreeMap<String, String> map = new TreeMap<>();
 		map.clear();
 		map.put("_key", KEY);
 		map.put("client_id", CLIENT_ID);
 		map.put("db_name", dbName);
 		map.put("table_name", tableName);
 		map.put("op", "create");
-		timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 		map.put("timestamp", timestamp);
-		// map.put("user_name", USERNAME);
 
 		map.put("_sign", md5(mapToString(map)));
 
-
-
-		url = URL + "/hive/meta/resfreshTableMeta" + "?" + mapToString(map);
+		String url = BASE_URL + "/hive/meta/resfreshTableMeta" + "?" + mapToString(map);
 		doPostRequest(url);
-		
-		
+	}
+
+	private static JsonNode doPostRequest(String url) {
+		URL obj;
+		try {
+			obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+			// 默认值GET
+			con.setRequestMethod("POST");
+
+			// 添加请求头
+			con.setRequestProperty("Content-Type", "application/json");
+
+			int responseCode = con.getResponseCode();
+			// System.out.println("Sending 'POST' request to URL : " + url);
+			// System.out.println("Response Code : " + responseCode);
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			// 打印结果
+			// System.out.println(response.toString());
+
+			ObjectMapper om = new ObjectMapper();
+
+			try {
+				return om.readTree(response.toString());
+			} catch (IOException e) {
+				System.out.println(e);
+			}
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return null;
+	}
+
+	private static String mapToString(Map<String, String> map) {
+		return map.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue())
+				.collect(Collectors.joining("&"));
+	}
+
+	private static String md5(String sourceStr) {
+		String result = "";
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(sourceStr.getBytes());
+			byte b[] = md.digest();
+			int i;
+			StringBuffer buf = new StringBuffer("");
+			for (int offset = 0; offset < b.length; offset++) {
+				i = b[offset];
+				if (i < 0)
+					i += 256;
+				if (i < 16)
+					buf.append("0");
+				buf.append(Integer.toHexString(i));
+			}
+			result = buf.toString();
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("NoSuchAlgorithmException:" + e);
+		}
+		return result;
 	}
 
 	/**
@@ -202,78 +272,4 @@ public class DbCloudUtil {
 
 		return responseEntity.getBody();
 	}
-
-	private static void doPostRequest(String url) {
-		URL obj;
-		try {
-			obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-			// 默认值GET
-			con.setRequestMethod("POST");
-
-			// 添加请求头
-			con.setRequestProperty("Content-Type", "application/json");
-
-			int responseCode = con.getResponseCode();
-			System.out.println("Sending 'POST' request to URL : " + url);
-			System.out.println("Response Code : " + responseCode);
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			// 打印结果
-			System.out.println(response.toString());
-
-			ObjectMapper om = new ObjectMapper();
-
-			try {
-				JsonNode json = om.readTree(response.toString());
-				System.out.println(json);
-				System.out.println(json.get("return_comment"));
-			} catch (IOException e) {
-				System.out.println(e);
-			}
-
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static String mapToString(Map<String, String> map) {
-		return map.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue())
-				.collect(Collectors.joining("&"));
-	}
-
-	private static String md5(String sourceStr) {
-		String result = "";
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(sourceStr.getBytes());
-			byte b[] = md.digest();
-			int i;
-			StringBuffer buf = new StringBuffer("");
-			for (int offset = 0; offset < b.length; offset++) {
-				i = b[offset];
-				if (i < 0)
-					i += 256;
-				if (i < 16)
-					buf.append("0");
-				buf.append(Integer.toHexString(i));
-			}
-			result = buf.toString();
-		} catch (NoSuchAlgorithmException e) {
-			System.out.println("NoSuchAlgorithmException:" + e);
-		}
-		return result;
-	}
-
 }
