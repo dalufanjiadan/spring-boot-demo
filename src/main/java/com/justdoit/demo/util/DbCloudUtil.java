@@ -112,7 +112,7 @@ public class DbCloudUtil {
 	private static void uploadTmpTable(String taskId) {
 
 		String dbName = "db_temp";
-		String tableName = taskId.replaceAll("-", "_");
+		String tableName = "user_cluster_" + taskId.replaceAll("-", "_");
 
 		String sql = "CREATE EXTERNAL TABLE tableName(" + "`device_id` String COMMENT '设备id') "
 				+ "ROW FORMAT DELIMITED " + "  FIELDS TERMINATED BY '\t' " + "  LINES TERMINATED BY '\n' "
@@ -200,7 +200,9 @@ public class DbCloudUtil {
 			ObjectMapper om = new ObjectMapper();
 
 			try {
-				return om.readTree(response.toString());
+				JsonNode json = om.readTree(response.toString());
+				// System.out.println(json);
+				return json;
 			} catch (IOException e) {
 				System.out.println(e);
 			}
