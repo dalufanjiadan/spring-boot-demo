@@ -117,41 +117,26 @@ public class DbCloudUtil {
 		// uri = "/hive/uploadTmpTable";
 		// map.clear();
 
-		String dbName = "user_cluster";
-		String tableName = "taskId";
+		String dbName = "db_temp";
+		String tableName = taskId.replaceAll("-", "_");
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("CREATE EXTERNAL " + tableName + "(`id` String COMMENT '账号/角色/设备id')\n");
-		sb.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY '\\t'\n");
-		sb.append("LINES TERMINATED BY '\\n'\n");
-		sb.append("STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat'\n");
-		sb.append("OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'\n");
-		sb.append("LOCATION 'hdfs:///user/hive/warehouse/" + dbName + ".db/" + tableName + "'");
-
-		String hive_sql = "CREATE EXTERNAL TABLE user_device_tmp2(" + "`device_id` String COMMENT '设备id') "
+		String hive_sql = "CREATE EXTERNAL TABLE tableName(" + "`device_id` String COMMENT '设备id') "
 				+ "ROW FORMAT DELIMITED " + "  FIELDS TERMINATED BY '\t' " + "  LINES TERMINATED BY '\n' "
 				+ "STORED AS INPUTFORMAT " + "  'org.apache.hadoop.mapred.TextInputFormat' " + "OUTPUTFORMAT"
 				+ "  'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat' " + "LOCATION "
-				+ " 'hdfs:///user/hive/warehouse/db_temp.db/user_device_tmp2'";
+				+ " 'hdfs:///user/hive/warehouse/dbName.db/tableName'";
 
-		String sql = "";
-		sql = hive_sql.replaceAll("user_device_tmp2", "taskId");
-
-		System.out.println(sql);
+		String sql = hive_sql.replaceAll("tableName", tableName);
+		sql = hive_sql.replaceAll("dbName", dbName);
 
 		map.clear();
 		map.put("_key", KEY);
 		map.put("client_id", CLIENT_ID);
-		// map.put("db_name", "db_temp");
 		map.put("sql", sql);
 		map.put("task_id", taskId);
 		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 		map.put("timestamp", timestamp);
 		map.put("user_name", USERNAME);
-
-		System.out.println(mapToString(map));
-		
-		
 		map.put("_sign", md5(mapToString(map)));
 
 		try {
