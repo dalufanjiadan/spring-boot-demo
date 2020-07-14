@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -26,6 +27,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 public class DbCloudUtil {
@@ -63,9 +66,9 @@ public class DbCloudUtil {
 
 		String url = URL + uri + "?" + mapToString(map);
 
-		JsonNode response = doPost(url, null);
+		Map response = doPost(url, null);
 
-		return response.get("data").get("task_id").asText();
+		return ((Map) response.get("data")).get("task_id").toString();
 	}
 
 	/**
@@ -92,7 +95,7 @@ public class DbCloudUtil {
 
 			System.out.println(url);
 
-			JsonNode response = doPost(url, null);
+			Map response = doPost(url, null);
 			return response;
 			// System.out.println("成功".equals(response.get("data").get("jobs").get("status")));
 
@@ -128,7 +131,7 @@ public class DbCloudUtil {
 	/**
 	 * db cloud post request
 	 */
-	private static JsonNode doPost(String url, Object body) {
+	private static Map doPost(String url, Object body) {
 
 		URI uri = null;
 		try {
@@ -138,20 +141,21 @@ public class DbCloudUtil {
 		}
 
 		RestTemplate restTemplate = new RestTemplate();
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Object> entity = new HttpEntity<Object>(body, headers);
-		ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+		ResponseEntity<Map> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, entity, Map.class);
 
-		ObjectMapper om = new ObjectMapper();
+		// ObjectMapper om = new ObjectMapper();
 
-		try {
-			return om.readTree(responseEntity.getBody());
-		} catch (IOException e) {
-			System.out.println(e);
-		}
+		// try {
+		// return om.readTree(responseEntity.getBody());
+		// } catch (IOException e) {
+		// System.out.println(e);
+		// }
 
-		return null;
+		return responseEntity.getBody();
 	}
 
 	private static void doPostRequest(String url) {

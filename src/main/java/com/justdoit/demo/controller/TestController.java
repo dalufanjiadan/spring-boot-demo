@@ -53,10 +53,13 @@ public class TestController {
 
 	@ApiOperation(value = "1 hello")
 	@GetMapping("/hello")
-	public RestResponse<String> hello() {
+	public Object hello() {
 
-		String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds where 1=1 limit 5";
 
+
+		String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds where game_id=360 limit 5";
+
+		sql="SELECT account FROM 	data_analyze_label.dm_label_gamelog_kpi_account_ds WHERE 	game_id = 94 	AND ds = '20200510' 	AND last_login_date > '2020-05-01' UNION SELECT 	account FROM 	data_analyze_label.dm_label_gamelog_kpi_account_ds WHERE 	game_id = 360 	AND ds = '20200510' 	AND last_login_date > '2020-05-01'"; 		
 		sql = sql.replaceAll("\n", " ");
 		sql = sql.replaceAll("\t", " ");
 
@@ -66,11 +69,8 @@ public class TestController {
 
 		System.out.println(taskId);
 
-		// return DbCloudUtil.saveToTable(taskId);
+		return DbCloudUtil.saveToTable(taskId);
 
-		// return "hello world";
-
-		return RestResponse.ok("hello world");
 	}
 
 	@GetMapping("/hello1")
