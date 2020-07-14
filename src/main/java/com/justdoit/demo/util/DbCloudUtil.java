@@ -149,6 +149,26 @@ public class DbCloudUtil {
 		String url = URL + "/hive/uploadTmpTable" + "?" + mapToString(map);
 		doPostRequest(url);
 
+		// 刷新元数据？
+		uri = "/hive/meta/resfreshTableMeta";
+		map.clear();
+		map.put("_key", KEY);
+		map.put("client_id", CLIENT_ID);
+		map.put("db_name", dbName);
+		map.put("table_name", tableName);
+		map.put("op", "create");
+		timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+		map.put("timestamp", timestamp);
+		// map.put("user_name", USERNAME);
+
+		map.put("_sign", md5(mapToString(map)));
+
+
+
+		url = URL + "/hive/meta/resfreshTableMeta" + "?" + mapToString(map);
+		doPostRequest(url);
+		
+		
 		return null;
 	}
 
