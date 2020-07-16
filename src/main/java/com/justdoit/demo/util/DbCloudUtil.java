@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justdoit.demo.model.RestResponse;
 
+import org.springframework.core.io.PathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,6 +31,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 public class DbCloudUtil {
@@ -65,6 +68,8 @@ public class DbCloudUtil {
 
 		String url = BASE_URL + "/presto/submitExecuteJob" + "?" + mapToString(map);
 		JsonNode response = doPostRequest(url);
+
+		System.out.println(response);
 
 		return response.get("data").get("task_id").asText();
 	}
@@ -273,5 +278,49 @@ public class DbCloudUtil {
 		// }
 
 		return responseEntity.getBody();
+	}
+
+	public static void upload() {
+		TreeMap<String, String> map = new TreeMap<>();
+		map.put("_key", KEY);
+		map.put("client_id", CLIENT_ID);
+		map.put("db_name", "db_temp");
+		// map.put("file", "demo1");
+		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+		map.put("timestamp", timestamp);
+		map.put("table_name", "user_cluster_cc3115bd_90f0_4bca_8e80_4df65abad0e4");
+		map.put("user_name", USERNAME);
+		map.put("_sign", md5(mapToString(map)));
+
+		String url = BASE_URL + "/hive/uploadDataToTmpTable" + "?" + mapToString(map);
+		doPostUploadRequest(url);
+	}
+
+	private static JsonNode doPostUploadRequest(String url) {
+
+		URI uri = null;
+		try {
+			uri = new URI(url);
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+		body.add("file", new PathResource("./upload/demo1.csv"));
+		HttpHeaders headers = new HttpHeaders();
+
+		HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.POST, requestEntity,
+				String.class);
+		// ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST,
+		// entity, String.class);
+
+		System.out.println(responseEntity);
+
+		return null;
 	}
 }
