@@ -26,6 +26,7 @@
 			</el-menu>
 		</el-header>
 		<el-main>
+			<el-button @click="onTest">test</el-button>
 			<router-view :key="activeIndex" />
 		</el-main>
 		<!-- <el-footer id="main-footer">
@@ -35,6 +36,8 @@
 </template>
 
 <script>
+import { fetchHello } from "@/api/todo";
+
 export default {
 	name: "App",
 	data() {
@@ -66,6 +69,12 @@ export default {
 				console.log(res);
 				console.log(res.data);
 			});
+		},
+		onTest() {
+			console.log("hello world");
+			fetchHello().then((response)=>{
+				console.log(response);
+			})
 		},
 	},
 	props: {

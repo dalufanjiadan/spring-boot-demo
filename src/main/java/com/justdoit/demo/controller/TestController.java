@@ -53,7 +53,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(description = "test")
 @RestController
-@RequestMapping("/api/v1/test")
+@RequestMapping("/test")
 public class TestController {
 
 	// @Autowired
@@ -69,22 +69,24 @@ public class TestController {
 	@GetMapping("/hello")
 	public Object hello() {
 
-		String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds where game_id=360 limit 8";
+		// String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds where game_id=360 limit 8";
 
-		// sql="SELECT account FROM data_analyze_label.dm_label_gamelog_kpi_account_ds
-		// WHERE game_id = 360 AND ds = '20200510' AND last_login_date > '2020-05-01'
-		// UNION SELECT account FROM data_analyze_label.dm_label_gamelog_kpi_account_ds
-		// WHERE game_id = 360 AND ds = '20200510' AND last_login_date > '2020-05-01'";
-		sql = sql.replaceAll("\n", " ");
-		sql = sql.replaceAll("\t", " ");
+		// // sql="SELECT account FROM data_analyze_label.dm_label_gamelog_kpi_account_ds
+		// // WHERE game_id = 360 AND ds = '20200510' AND last_login_date > '2020-05-01'
+		// // UNION SELECT account FROM data_analyze_label.dm_label_gamelog_kpi_account_ds
+		// // WHERE game_id = 360 AND ds = '20200510' AND last_login_date > '2020-05-01'";
+		// sql = sql.replaceAll("\n", " ");
+		// sql = sql.replaceAll("\t", " ");
 
-		System.out.println(sql);
+		// System.out.println(sql);
 
-		String taskId = DbCloudUtil.doQueryAsync(sql);
+		// String taskId = DbCloudUtil.doQueryAsync(sql);
 
-		System.out.println(taskId);
+		// System.out.println(taskId);
 
-		return DbCloudUtil.saveToTable(taskId);
+		// return DbCloudUtil.saveToTable(taskId);
+
+		return "hello world--";
 
 	}
 
