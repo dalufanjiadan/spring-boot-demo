@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.google.common.base.Splitter;
@@ -25,6 +27,7 @@ import com.justdoit.demo.mapper.UserMapper;
 import com.justdoit.demo.model.RestResponse;
 import com.justdoit.demo.model.User;
 import com.justdoit.demo.util.DbCloudUtil;
+import com.justdoit.demo.util.ValidateCode;
 import com.opencsv.CSVWriter;
 
 import org.checkerframework.checker.units.qual.s;
@@ -34,6 +37,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.util.FileCopyUtils;
@@ -45,11 +49,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+/**
+ * InnerTestController
+ */
+class InnerTestController {
+
+}
 
 @Api(description = "test")
 @RestController
@@ -60,33 +72,26 @@ public class TestController {
 	// private KafKaProducerService kafKaProducerService;
 
 	@Autowired
+	private RedisTemplate redisTemplate;
+
+	@Autowired
 	private MessageSource messageSource;
 
 	@Autowired
 	private UserMapper userMapper;
 
+	@Autowired
+	private ValidateCode validateCode;
+
 	@ApiOperation(value = "1 hello")
 	@GetMapping("/hello")
 	public Object hello() {
 
-		// String sql = "SELECT account from data_analyze_label.dm_label_gamelog_kpi_account_ds where game_id=360 limit 8";
+		redisTemplate.opsForValue().set("hello", "world...");
 
-		// // sql="SELECT account FROM data_analyze_label.dm_label_gamelog_kpi_account_ds
-		// // WHERE game_id = 360 AND ds = '20200510' AND last_login_date > '2020-05-01'
-		// // UNION SELECT account FROM data_analyze_label.dm_label_gamelog_kpi_account_ds
-		// // WHERE game_id = 360 AND ds = '20200510' AND last_login_date > '2020-05-01'";
-		// sql = sql.replaceAll("\n", " ");
-		// sql = sql.replaceAll("\t", " ");
+		System.out.println(redisTemplate.opsForValue().get("hello"));
 
-		// System.out.println(sql);
-
-		// String taskId = DbCloudUtil.doQueryAsync(sql);
-
-		// System.out.println(taskId);
-
-		// return DbCloudUtil.saveToTable(taskId);
-
-		return "hello world--";
+		return "hello world";
 
 	}
 
@@ -96,6 +101,27 @@ public class TestController {
 		System.out.println(params);
 
 		return RestResponse.ok(params);
+	}
+
+	// 生成验证码图片
+	@RequestMapping("/getCaptchaImage")
+	@ResponseBody
+	public void getCaptcha(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+
+			response.setContentType("image/png");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setHeader("Expire", "0");
+			response.setHeader("Pragma", "no-cache");
+
+			// 直接返回图片
+			validateCode.getRandomCodeImage(request, response);
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
 	}
 
 	@ApiOperation(value = "2 lang")
@@ -134,13 +160,8 @@ public class TestController {
 			String data = new String(bytes, StandardCharsets.UTF_8);
 			System.out.println(data);
 
-
 			Splitter splitter = Splitter.on(",").trimResults();
 			List<String> ids = splitter.splitToList(data);
-
-			
-			
-			
 
 			String path = "./upload/demo1.csv";
 			try (//
@@ -151,13 +172,12 @@ public class TestController {
 							CSVWriter.DEFAULT_ESCAPE_CHARACTER, //
 							CSVWriter.DEFAULT_LINE_END);//
 			) {
-				String[] headerRecord = { "id"};
+				String[] headerRecord = { "id" };
 				csvWriter.writeNext(headerRecord);
 
 				for (int i = 0; i < ids.size(); i++) {
-					
-					csvWriter.writeNext(
-							new String[] { ids.get(i) });
+
+					csvWriter.writeNext(new String[] { ids.get(i) });
 				}
 			}
 
@@ -176,8 +196,6 @@ public class TestController {
 			byte[] bytes = file.getBytes();
 
 			System.out.println("===");
-
-			
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -217,7 +235,6 @@ public class TestController {
 					.writeNext(new String[] { "Satya Nadella", "satya.nadella@outlook.com", "+1-1111111112", "India" });
 		}
 	}
-
 
 	@GetMapping("/uploadToHive")
 	public void uploadToHive() {
