@@ -8,6 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.justdoit.demo.mapper.TodoMapper;
 import com.justdoit.demo.model.Todo;
+import com.justdoit.demo.payload.CreateTodoRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,14 @@ public class TodoService {
 		result.put("todos", todos);
 
 		return result;
+	}
+
+	public Object createTodo(CreateTodoRequest createTodoRequest) {
+
+		Todo todo = new Todo(createTodoRequest);
+		mapper.insertTodo(todo);
+
+		return todo;
 	}
 
 }

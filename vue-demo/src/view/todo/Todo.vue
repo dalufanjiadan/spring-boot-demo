@@ -4,7 +4,7 @@
 			type="primary"
 			icon="el-icon-plus"
 			circle
-			@click="createTaskItemFormVisible = true"
+			@click="flag = true"
 			id="createTodoButton"
 		></el-button>
 		<el-tabs :tab-position="'right'" @tab-click="tabClick()" v-model="status">
@@ -12,7 +12,7 @@
 				<div v-for="(todo, index) in todos" :todo="todo" :key="index">
 					<el-row :gutter="20">
 						<el-col :span="20">
-							{{ todo.id + todo.description }}
+							{{ todo.id + todo.text }}
 						</el-col>
 						<el-col :span="2">
 							<el-button
@@ -42,7 +42,7 @@
 				<div v-for="(todo, index) in todos" :todo="todo" :key="index">
 					<el-row :gutter="20">
 						<el-col :span="22">
-							{{ todo.id + todo.description }}
+							{{ todo.id + todo.text }}
 						</el-col>
 
 						<el-col :span="2">
@@ -64,7 +64,7 @@
 				<div v-for="(todo, index) in todos" :todo="todo" :key="index">
 					<el-row :gutter="20">
 						<el-col :span="22">
-							{{ todo.id + todo.description }}
+							{{ todo.id + todo.text }}
 						</el-col>
 
 						<el-col :span="2">
@@ -93,17 +93,17 @@
 		>
 		</el-pagination>
 
-		<!-- <el-dialog title="新建todo" :visible.sync="createTaskItemFormVisible">
-			<el-form :model="createTaskItemform">
+		<el-dialog title="新建todo" :visible.sync="flag">
+			<el-form :model="createTodoForm">
 				<el-form-item label="描述" :label-width="formLabelWidth">
-					<el-input v-model="createTaskItemform.text" autocomplete="off"></el-input>
+					<el-input v-model="createTodoForm.text" autocomplete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="createTaskItemFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="createTaskItem">确 定</el-button>
+				<el-button @click="flag = false">取 消</el-button>
+				<el-button type="primary" @click="createTodo">确 定</el-button>
 			</div>
-		</el-dialog> -->
+		</el-dialog>
 	</div>
 </template>
 
@@ -121,6 +121,11 @@ export default {
 			pageSize: 8,
 			status: 0,
 			username: "gech",
+			createTodoForm: {
+				text: "",
+				username: "gech",
+			},
+			flag: false,
 		};
 	},
 	created() {
@@ -144,6 +149,10 @@ export default {
 				this.total = res.data.total;
 				this.todos = res.data.todos;
 			});
+		},
+		createTodo() {
+			this.flag = false;
+			console.log(this.createTodoForm);
 		},
 	},
 	computed: {},

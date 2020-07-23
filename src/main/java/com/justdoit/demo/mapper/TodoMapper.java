@@ -12,4 +12,6 @@ public interface TodoMapper {
 
 	List<Todo> findTodos(String username, int status);
 
+	int insertTodo(Todo todo);
+
 }

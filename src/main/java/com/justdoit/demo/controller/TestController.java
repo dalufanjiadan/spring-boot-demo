@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.justdoit.demo.kafka.KafKaProducerService;
 import com.justdoit.demo.mapper.UserMapper;
 import com.justdoit.demo.model.RestResponse;
@@ -87,9 +89,13 @@ public class TestController {
 	@GetMapping("/hello")
 	public Object hello() {
 
-		redisTemplate.opsForValue().set("hello", "world...");
+		List<Integer> nums = Lists.newArrayList(1, 2, 3, 4, 5);
 
-		System.out.println(redisTemplate.opsForValue().get("hello"));
+		redisTemplate.opsForList().leftPushAll("nums", nums);
+
+		Long size = redisTemplate.opsForList().size("nums");
+
+		System.out.println(redisTemplate.opsForList().range("nums", 0, size - 1));
 
 		return "hello world";
 

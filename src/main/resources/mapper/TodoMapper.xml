@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.justdoit.demo.mapper.TodoMapper">
 
+	<insert id="insertTodo" keyProperty="id" useGeneratedKeys="true" parameterType="com.justdoit.demo.model.Todo">
+		INSERT INTO 
+			test.todo(username, text, status)
+		VALUES
+			(#{username}, #{text}, #{status});
+	</insert>
+
+
 	<select id="findTodos" resultType="com.justdoit.demo.model.Todo">
 		SELECT
 			*
@@ -9,7 +17,7 @@
 			test.todo 
 		WHERE 
 			username = #{username}
-		<if test="status != 2">
+		<if test="status != 3">
 			and status = #{status}
 		</if>
 	</select>
