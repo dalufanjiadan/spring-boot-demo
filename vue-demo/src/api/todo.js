@@ -8,6 +8,14 @@ export function fetchHello(query) {
 	});
 }
 
+export function fetchTodos(query) {
+	return request({
+		url: "/api/v1/todos",
+		method: "get",
+		params: query,
+	});
+}
+
 export function fetchList(query) {
 	return request({
 		url: "/vue-element-admin/article/list",

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.justdoit.demo.mapper.TodoMapper">
+
+	<select id="findTodos" resultType="com.justdoit.demo.model.Todo">
+		SELECT
+			*
+		FROM
+			test.todo 
+		WHERE 
+			username = #{username}
+		<if test="status != 2">
+			and status = #{status}
+		</if>
+	</select>
+</mapper>

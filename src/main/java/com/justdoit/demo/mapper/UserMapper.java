@@ -13,6 +13,6 @@ public interface UserMapper {
 
 	int insertUser(User user);
 
-	@Select("select * from user")
+	@Select("select * from users")
 	List<User> findAll();
 }

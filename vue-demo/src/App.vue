@@ -26,7 +26,6 @@
 			</el-menu>
 		</el-header>
 		<el-main>
-			<!-- <el-button @click="onTest">test</el-button> -->
 			<router-view />
 		</el-main>
 		<!-- <el-footer id="main-footer">
@@ -68,12 +67,6 @@ export default {
 			this.$http.get("/api/v1/test/hello").then((res) => {
 				console.log(res);
 				console.log(res.data);
-			});
-		},
-		onTest() {
-			console.log("hello world");
-			fetchHello().then((response) => {
-				console.log(response);
 			});
 		},
 	},
