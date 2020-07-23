@@ -21,9 +21,17 @@ const routes = [
 		component: () => import("../view/todo/Todo.vue"),
 	},
 	{
-		path: "/chat",
-		name: "chat",
-		component: () => import("../view/chat/Chat.vue"),
+		path: "/demo",
+		name: "demo",
+		component: () => import("../view/demo/Demo.vue"),
+		redirect: "/demo-todo",
+		children: [
+			{
+				path: "/demo-todo",
+				name: "demo-todo",
+				component: () => import("../view/todo/Todo.vue"),
+			},
+		],
 	},
 	{
 		path: "/test",
@@ -39,6 +47,7 @@ const routes = [
 		path: "/admin",
 		name: "admin",
 		component: () => import("../view/Admin.vue"),
+		redirect: "/admin-user-find",
 		children: [
 			{
 				path: "/admin-user-create",

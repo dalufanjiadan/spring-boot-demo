@@ -11,7 +11,7 @@
 				<el-menu-item index="1" route="/Home"> Home</el-menu-item>
 				<el-menu-item index="2" route="/Todo"> Todo</el-menu-item>
 				<el-menu-item index="3" route="/Test"> Test</el-menu-item>
-				<el-menu-item index="4" route="/Chat"> Chart</el-menu-item>
+				<el-menu-item index="4" route="/demo"> Demo</el-menu-item>
 				<el-submenu index="5" route="/about" id="user">
 					<template slot="title"
 						><el-avatar
@@ -26,8 +26,8 @@
 			</el-menu>
 		</el-header>
 		<el-main>
-			<el-button @click="onTest">test</el-button>
-			<router-view :key="activeIndex" />
+			<!-- <el-button @click="onTest">test</el-button> -->
+			<router-view />
 		</el-main>
 		<!-- <el-footer id="main-footer">
 			©Copyright 2019
@@ -72,9 +72,9 @@ export default {
 		},
 		onTest() {
 			console.log("hello world");
-			fetchHello().then((response)=>{
+			fetchHello().then((response) => {
 				console.log(response);
-			})
+			});
 		},
 	},
 	props: {
