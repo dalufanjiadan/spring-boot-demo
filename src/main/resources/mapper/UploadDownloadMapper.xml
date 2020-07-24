@@ -8,4 +8,16 @@
 		VALUES
 			(#{fileName}, #{fileType}, #{data})
 	</insert>
+
+
+	<select id="findById" parameterType="long" resultType="com.justdoit.demo.model.DBFile">
+		SELECT
+			name as fileName,
+			type as fileType,
+			data
+		FROM
+			file
+		WHERE
+			id = #{id}
+	</select>
 </mapper>
