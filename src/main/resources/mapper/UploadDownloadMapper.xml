@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.justdoit.demo.mapper.UploadDownloadMapper">
+
+	<insert id="insertFile" useGeneratedKeys="true" keyProperty="id" parameterType="com.justdoit.demo.model.DBFile">
+		INSERT INTO 
+			file(name, type, data)
+		VALUES
+			(#{fileName}, #{fileType}, #{data})
+	</insert>
+</mapper>

@@ -31,6 +31,11 @@ const routes = [
 				name: "demo-todo",
 				component: () => import("../view/todo/Todo.vue"),
 			},
+			{
+				path: "/demo-upload-download",
+				name: "demo-upload-down",
+				component: () => import("../view/upload-download/UploadDownload.vue"),
+			},
 		],
 	},
 	{

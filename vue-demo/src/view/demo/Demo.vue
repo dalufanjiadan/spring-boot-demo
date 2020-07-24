@@ -14,6 +14,10 @@
 					<i class="el-icon-menu"></i>
 					<span slot="title">TODO</span>
 				</el-menu-item>
+				<el-menu-item index="2" route="/demo-upload-download">
+					<i class="el-icon-upload2"></i>
+					<span slot="title">UPLOAD/DOWNLOAD</span>
+				</el-menu-item>
 			</el-menu>
 		</el-aside>
 		<el-main>

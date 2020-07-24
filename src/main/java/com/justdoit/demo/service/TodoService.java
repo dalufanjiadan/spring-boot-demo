@@ -38,8 +38,6 @@ public class TodoService {
 		// 封装分页查询结果到 PageInfo 对象中以获取相关分页信息
 		PageInfo pageInfo = new PageInfo(todos);
 
-		System.out.println(pageInfo);
-
 		Map<String, Object> result = new HashMap<>();
 		result.put("total", pageInfo.getTotal());
 		result.put("todos", todos);

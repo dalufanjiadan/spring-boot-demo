@@ -40,6 +40,18 @@ spring:
                 # 连接超时时间（毫秒）
                 timeout: 5000
 
+    ## MULTIPART (MultipartProperties)
+    # Enable multipart uploads
+    servlet:
+        multipart:
+            enabled: true
+            # Threshold after which files are written to disk.
+            file-size-threshold: 2KB
+            # Max file size.
+            max-file-size: 200MB
+            # Max Request Size
+            max-request-size: 215MB
+
 mybatis:
     mapperLocations: classpath:mapper/**/*.xml
 
@@ -68,3 +80,4 @@ enable:
     security: false
     redis: false
     kafka: false
+    webSocket: false
