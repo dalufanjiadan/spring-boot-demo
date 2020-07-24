@@ -108,7 +108,8 @@
 </template>
 
 <script>
-import { fetchTodos } from "@/api/todo";
+// import { api as API } from "@/api/todo";
+import { api } from "@/api/todo";
 
 export default {
 	name: "Todo",
@@ -145,14 +146,16 @@ export default {
 				currentPage: this.currentPage,
 				pageSize: this.pageSize,
 			};
-			fetchTodos(params).then((res) => {
+			api.getTodos(params).then((res) => {
 				this.total = res.data.total;
 				this.todos = res.data.todos;
 			});
 		},
 		createTodo() {
 			this.flag = false;
-			console.log(this.createTodoForm);
+			api.createTodo(this.createTodoForm).then((res) => {
+				this.getTodos();
+			});
 		},
 	},
 	computed: {},

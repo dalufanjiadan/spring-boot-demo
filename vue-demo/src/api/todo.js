@@ -1,18 +1,18 @@
 import request from "@/util/request";
 
-export function fetchHello(query) {
+export function getTodos(query) {
 	return request({
-		url: "/test/hello",
+		url: "/api/v1/todos",
 		method: "get",
 		params: query,
 	});
 }
 
-export function fetchTodos(query) {
+export function createTodo(data) {
 	return request({
 		url: "/api/v1/todos",
-		method: "get",
-		params: query,
+		method: "post",
+		data,
 	});
 }
 
@@ -55,3 +55,8 @@ export function updateArticle(data) {
 		data,
 	});
 }
+
+export const api = {
+	getTodos,
+	createTodo,
+};
