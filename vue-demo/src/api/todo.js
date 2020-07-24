@@ -16,6 +16,21 @@ export function createTodo(data) {
 	});
 }
 
+export function deleteTodo(id) {
+	return request({
+		url: "/api/v1/todos/" + id,
+		method: "delete",
+	});
+}
+
+export function updateTodo(id, data) {
+	return request({
+		url: "/api/v1/todos/" + id,
+		method: "put",
+		data,
+	});
+}
+
 export function fetchList(query) {
 	return request({
 		url: "/vue-element-admin/article/list",
@@ -59,4 +74,6 @@ export function updateArticle(data) {
 export const api = {
 	getTodos,
 	createTodo,
+	updateTodo,
+	deleteTodo,
 };

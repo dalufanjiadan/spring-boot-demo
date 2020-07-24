@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import com.justdoit.demo.mapper.TodoMapper;
 import com.justdoit.demo.model.Todo;
 import com.justdoit.demo.payload.CreateTodoRequest;
+import com.justdoit.demo.payload.UpdateTodoRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,16 @@ public class TodoService {
 		mapper.insertTodo(todo);
 
 		return todo;
+	}
+
+	public Object deleteTodo(long todoId) {
+
+		return mapper.deleteTodo(todoId);
+	}
+
+	public Object updateTodo(long todoId, UpdateTodoRequest updateTodoRequest) {
+
+		return mapper.updateTodo(todoId, updateTodoRequest);
 	}
 
 }

@@ -19,7 +19,7 @@
 								type="success"
 								icon="el-icon-success"
 								circle
-								@click="finishTask(index)"
+								@click="updateTodo(todo, 1)"
 								style="float:right"
 								size="medium"
 							></el-button>
@@ -29,7 +29,7 @@
 								type="danger"
 								icon="el-icon-delete"
 								circle
-								@click="deleteTask(taskItemListNotFinished, index)"
+								@click="updateTodo(todo, 2)"
 								size="medium"
 								style="float:right"
 							></el-button>
@@ -50,7 +50,7 @@
 								type="danger"
 								icon="el-icon-delete"
 								circle
-								@click="deleteTask(taskItemListFinished, index)"
+								@click="updateTodo(todo, 3)"
 								size="medium"
 								style="float:right"
 							></el-button>
@@ -72,7 +72,7 @@
 								type="danger"
 								icon="el-icon-error"
 								circle
-								@click="removeTask(index)"
+								@click="deleteTodo(todo.id)"
 								size="medium"
 								style="float:right"
 							></el-button>
@@ -154,6 +154,20 @@ export default {
 		createTodo() {
 			this.flag = false;
 			api.createTodo(this.createTodoForm).then((res) => {
+				this.getTodos();
+			});
+		},
+		updateTodo(todo, status) {
+			let data = {
+				text: todo.text,
+				status: status,
+			};
+			api.updateTodo(todo.id, data).then((res) => {
+				this.getTodos();
+			});
+		},
+		deleteTodo(id) {
+			api.deleteTodo(id).then((res) => {
 				this.getTodos();
 			});
 		},
