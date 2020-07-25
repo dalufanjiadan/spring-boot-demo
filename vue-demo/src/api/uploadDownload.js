@@ -1,8 +1,17 @@
 import request from "@/util/request";
 
+const url = "/api/v1/demo/files";
+
+export function deleteFile(id) {
+	return request({
+		url: `${url}/${id}`,
+		method: "delete",
+	});
+}
+
 export function getFiles(params) {
 	return request({
-		url: "/api/v1/upload-files",
+		url: url,
 		method: "get",
 		params,
 	});
@@ -10,7 +19,7 @@ export function getFiles(params) {
 
 export function downloadFile(id) {
 	return request({
-		url: `/api/v1/download-file/${id}`,
+		url: `${url}/${id}/download`,
 		method: "get",
 	});
 }
@@ -18,4 +27,5 @@ export function downloadFile(id) {
 export const api = {
 	getFiles,
 	downloadFile,
+	deleteFile,
 };

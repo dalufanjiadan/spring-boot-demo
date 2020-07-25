@@ -10,7 +10,6 @@ import com.github.pagehelper.PageInfo;
 import com.justdoit.demo.mapper.UploadDownloadMapper;
 import com.justdoit.demo.model.DBFile;
 
-import org.apache.kafka.common.metrics.stats.Total;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -27,17 +26,14 @@ public class UploadDownloadService {
 		// Normalize file name
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-		System.out.println(fileName);
-
 		try {
 			// Check if the file's name contains invalid characters
 			if (fileName.contains("..")) {
 				throw new Exception("Sorry! Filename contains invalid path sequence " + fileName);
 			}
 
-			DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
+			DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes(), file.getSize());
 			mapper.insertFile(dbFile);
-			System.out.println(dbFile);
 
 			String fileDownloadUri = ServletUriComponentsBuilder//
 					.fromCurrentContextPath()//
@@ -47,7 +43,7 @@ public class UploadDownloadService {
 
 			Map<String, Object> result = new HashMap<>();
 			result.put("name", dbFile.getFileName());
-			result.put("size", file.getSize());
+			result.put("size", dbFile.getSize());
 			result.put("type", dbFile.getFileType());
 			result.put("downloadUri", fileDownloadUri);
 
@@ -67,7 +63,7 @@ public class UploadDownloadService {
 		return mapper.deleteFile(fileId);
 	}
 
-	public Object getUploadedFiles(int currentPage, int pageSize) {
+	public Object getFiles(int currentPage, int pageSize) {
 		PageHelper.startPage(currentPage, pageSize);
 		List<Map<String, Object>> files = mapper.findAllFiles();
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(files);

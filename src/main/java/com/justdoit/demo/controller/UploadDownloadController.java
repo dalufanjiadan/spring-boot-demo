@@ -33,8 +33,8 @@ import cn.hutool.core.io.FileUtil;
 import io.swagger.annotations.Api;
 
 @RestController
-@RequestMapping("/api/v1")
-@Api(tags = "upload/download")
+@RequestMapping("/api/v1/demo/files")
+@Api(tags = "demo-files")
 public class UploadDownloadController {
 
 	@Autowired
@@ -45,14 +45,13 @@ public class UploadDownloadController {
 	 * 
 	 * 还是存到磁盘吧 数据库存个路径
 	 */
-	@PostMapping("/upload-file")
 	public Object uploadFile(@RequestParam("file") MultipartFile file, @RequestParam Map<String, Object> params)
 			throws Exception {
 
 		return RestResponse.ok(service.storeFile(file));
 	}
 
-	@PostMapping("/upload-multiple-files")
+	@PostMapping
 	public Object uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
 		List<Map<String, Object>> result = Arrays.asList(files).stream().map(file -> {
 			try {
@@ -66,27 +65,28 @@ public class UploadDownloadController {
 		return RestResponse.ok(result);
 	}
 
-	@DeleteMapping("/delete-file/{fileId}")
+	@DeleteMapping("/{fileId}")
 	public Object deleteFile(@PathVariable long fileId) {
 
 		return RestResponse.ok(service.deleteFile(fileId));
 	}
 
-	@GetMapping("/download-file/{fileId}")
+	@GetMapping
+	public RestResponse<Object> getFiles(@RequestParam int currentPage, @RequestParam int pageSize) {
+
+		return RestResponse.ok(service.getFiles(currentPage, pageSize));
+	}
+
+	@GetMapping("/{fileId}/download")
 	public Object downloadFile(@PathVariable long fileId) throws Exception {
 		// Load file from database
 		DBFile dbFile = service.getFile(fileId);
+
+		
 
 		return ResponseEntity.ok()//
 				.contentType(MediaType.parseMediaType(dbFile.getFileType()))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
 				.body(new ByteArrayResource(dbFile.getData()));
 	}
-
-	@GetMapping("/upload-files")
-	public RestResponse<Object> getUploadedFiles(@RequestParam int currentPage, @RequestParam int pageSize) {
-
-		return RestResponse.ok(service.getUploadedFiles(currentPage, pageSize));
-	}
-
 }

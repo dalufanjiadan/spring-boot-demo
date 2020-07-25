@@ -4,9 +4,9 @@
 
 	<insert id="insertFile" useGeneratedKeys="true" keyProperty="id" parameterType="com.justdoit.demo.model.DBFile">
 		INSERT INTO 
-			file(name, type, data)
+			file(name, type, data, size)
 		VALUES
-			(#{fileName}, #{fileType}, #{data})
+			(#{fileName}, #{fileType}, #{data}, #{size})
 	</insert>
 
 
@@ -14,7 +14,8 @@
 		SELECT
 			name as fileName,
 			type as fileType,
-			data
+			data,
+			size
 		FROM
 			file
 		WHERE
@@ -27,6 +28,8 @@
 			id,
 			name as fileName,
 			type as fileType,
+			data,
+			size,
 			created_at as createdAt
 		FROM
 			file

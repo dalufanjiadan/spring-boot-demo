@@ -89,13 +89,7 @@ public class TestController {
 	@GetMapping("/hello")
 	public Object hello() {
 
-		List<Integer> nums = Lists.newArrayList(1, 2, 3, 4, 5);
-
-		redisTemplate.opsForList().leftPushAll("nums", nums);
-
-		Long size = redisTemplate.opsForList().size("nums");
-
-		System.out.println(redisTemplate.opsForList().range("nums", 0, size - 1));
+		System.out.println(Integer.MAX_VALUE);
 
 		return "hello world";
 

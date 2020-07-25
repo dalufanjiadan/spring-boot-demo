@@ -8,7 +8,8 @@
 			id="el-upload-1"
 			class="upload-demo"
 			drag
-			action="http://localhost:8000/api/v1/upload-file"
+			:action="uploadUrl"
+			name="files"
 			:limit="1"
 			multiple="false"
 			show-file-list="true"
@@ -26,13 +27,14 @@
 			id="el-upload-2"
 			class="upload-demo"
 			drag
-			action="http://localhost:8000/api/v1/upload-multiple-files"
+			:action="uploadUrl"
 			:limit="3"
 			multiple
 			show-file-list="true"
 			:data="data"
 			auto-upload="false"
 			name="files"
+			:on-success="uploadSuccess"
 		>
 			<i class="el-icon-upload"></i>
 			<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -44,6 +46,7 @@
 			<el-table-column prop="createdAt" label="日期" width="180"> </el-table-column>
 			<el-table-column prop="fileName" label="名称" width="180"> </el-table-column>
 			<el-table-column prop="fileType" label="类型"> </el-table-column>
+			<el-table-column prop="size" label="大小"> </el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button
@@ -78,10 +81,11 @@
 
 <script>
 import { api } from "@/api/uploadDownload";
-
+const baseUrl = process.env.VUE_APP_BASE_API;
 export default {
 	data() {
 		return {
+			uploadUrl: baseUrl + "/api/v1/demo/files",
 			data: {
 				username: "sanhaoxuesheng",
 				type: 0,
@@ -100,7 +104,7 @@ export default {
 	},
 	methods: {
 		uploadSuccess(response, file, fileList) {
-			console.log(response.data.downloadUri);
+			this.getTableData();
 		},
 		getTableData() {
 			let params = {
@@ -108,8 +112,10 @@ export default {
 				pageSize: this.pagination.pageSize,
 			};
 			api.getFiles(params).then((res) => {
-				console.log(res);
 				this.tableData = res.data.data;
+				for (const element of this.tableData) {
+					element.size = this.convertFileSize(element.size);
+				}
 				this.pagination.total = res.data.total;
 			});
 		},
@@ -117,20 +123,35 @@ export default {
 			this.getTableData();
 		},
 		downloadFile(index, row) {
-			console.log(row.id);
-			console.log(row.fileName);
-			api.downloadFile(row.id).then((res) => {
-				const url = window.URL.createObjectURL(new Blob([res.data]));
-				const link = document.createElement("a");
-				link.href = url;
-				link.setAttribute("download", row.fileName); //or any other extension
-				document.body.appendChild(link);
-				link.click();
-			});
+			let a = document.createElement("a");
+			let url = `${baseUrl}/api/v1/demo/files/${row.id}/download`;
+			let filename = row.filename;
+			a.href = url;
+			a.download = filename;
+			a.click();
 		},
 		deleteFile(index, row) {
-			console.log(index);
-			console.log(row);
+			api.deleteFile(row.id).then((res) => {
+				console.log(res);
+				this.getTableData();
+			});
+		},
+
+		convertFileSize(fileSize) {
+			let result = "";
+			if (fileSize >= 1024 * 1024 * 1024) {
+				// B => GB
+				result = (fileSize / (1024 * 1024 * 1024)).toFixed(2) + "G";
+			} else if (fileSize >= 1048576) {
+				// B => MB
+				result = (fileSize / (1024 * 1024)).toFixed(2) + "MB";
+			} else if (fileSize >= 1024) {
+				// B => KB
+				result = (fileSize / 1024).toFixed(2) + "KB";
+			} else {
+				result = fileSize + "B";
+			}
+			return result;
 		},
 	},
 };
