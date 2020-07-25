@@ -2,11 +2,15 @@ package com.justdoit.demo.service;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.justdoit.demo.mapper.UploadDownloadMapper;
 import com.justdoit.demo.model.DBFile;
 
+import org.apache.kafka.common.metrics.stats.Total;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -57,5 +61,21 @@ public class UploadDownloadService {
 
 	public DBFile getFile(long fileId) throws Exception {
 		return mapper.findById(fileId).orElseThrow(() -> new Exception("File not found with id " + fileId));
+	}
+
+	public Object deleteFile(long fileId) {
+		return mapper.deleteFile(fileId);
+	}
+
+	public Object getUploadedFiles(int currentPage, int pageSize) {
+		PageHelper.startPage(currentPage, pageSize);
+		List<Map<String, Object>> files = mapper.findAllFiles();
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(files);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("total", pageInfo.getTotal());
+		result.put("data", files);
+
+		return result;
 	}
 }

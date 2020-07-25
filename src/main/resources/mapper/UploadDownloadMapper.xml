@@ -20,4 +20,15 @@
 		WHERE
 			id = #{id}
 	</select>
+
+
+	<select id="findAllFiles" resultType="java.util.Map">
+		SELECT
+			id,
+			name as fileName,
+			type as fileType,
+			created_at as createdAt
+		FROM
+			file
+	</select>
 </mapper>

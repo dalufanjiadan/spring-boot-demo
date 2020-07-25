@@ -36,7 +36,7 @@ public class TodoService {
 		PageHelper.startPage(currentPage, pageSize);
 		List<Todo> todos = mapper.findTodos(username, status);
 		// 封装分页查询结果到 PageInfo 对象中以获取相关分页信息
-		PageInfo pageInfo = new PageInfo(todos);
+		PageInfo<Todo> pageInfo = new PageInfo<>(todos);
 
 		Map<String, Object> result = new HashMap<>();
 		result.put("total", pageInfo.getTotal());
