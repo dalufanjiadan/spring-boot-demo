@@ -14,6 +14,7 @@
 		<el-divider></el-divider>
 		<el-input v-model="age" placeholder="请输入内容"></el-input>
 		{{ getPeopleByAge(28) }}
+		<!-- {{this.$store.getters.people.getPeopleByAge(28)}} -->
 		<el-divider></el-divider>
 
 		<div id="char1" style="width: 600px;height:400px;"></div>

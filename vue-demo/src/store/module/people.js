@@ -14,7 +14,7 @@ const people = {
 			return state.people.filter((n) => n.age > 10);
 		},
 		getPeopleByAge: (state) => (age) => {
-			return state.people.find((n) => n.age === age);
+			return 1111123;
 		},
 	},
 	//方法methods
