@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import people from "./module/people";
-import test from "./module/Test"
+import test from "./module/Test";
+import user from "./module/user";
 
 Vue.use(Vuex);
 
@@ -43,7 +44,8 @@ const store = new Vuex.Store({
 	//模块
 	modules: {
 		people,
-		test
+		test,
+		user,
 	},
 });
 

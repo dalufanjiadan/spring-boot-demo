@@ -76,6 +76,7 @@ kafka:
             test: test
             user: user
 
+
 enable:
     security: false
     redis: false
