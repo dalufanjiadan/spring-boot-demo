@@ -176,7 +176,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #createTodoButton {
 	position: fixed;
 	margin-top: 20%;

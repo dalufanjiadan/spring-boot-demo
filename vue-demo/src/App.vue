@@ -8,14 +8,8 @@
 				router="true"
 				mode="horizontal"
 			>
-				<el-menu-item index="1" route="/Home" class="el-menu-item-1"> Home</el-menu-item>
-				<el-submenu index="2">
-					<template slot="title">我的工作台</template>
-					<el-menu-item index="2-1">选项1</el-menu-item>
-					<el-menu-item index="2-2">选项2</el-menu-item>
-					<el-menu-item index="2-3">选项3</el-menu-item>
-				</el-submenu>
-				<el-menu-item index="3" route="/demo" class="el-menu-item-1"> Demo</el-menu-item>
+				<el-menu-item index="home" route="/Home" class="el-menu-item-1"> Home</el-menu-item>
+				<el-menu-item index="demo" route="/demo" class="el-menu-item-1"> Demo</el-menu-item>
 			</el-menu>
 
 			<el-menu
@@ -27,14 +21,14 @@
 			>
 				<el-menu-item
 					v-if="hasSignedIn === false"
-					index="1"
+					index="signup"
 					class="el-menu-item-right el-menu-item-1"
 				>
 					注册
 				</el-menu-item>
 				<el-menu-item
 					v-if="hasSignedIn === false"
-					index="2"
+					index="signin"
 					class="el-menu-item-right el-menu-item-1"
 					@click="showLoginDialog"
 				>
@@ -51,7 +45,12 @@
 					<el-menu-item index="user-2" class="el-menu-item-1">选项2</el-menu-item>
 
 					<el-divider v-if="isAdmin"></el-divider>
-					<el-menu-item index="user-3" v-if="isAdmin" route="/admin" class="el-menu-item-1">
+					<el-menu-item
+						index="user-3"
+						v-if="isAdmin"
+						route="/admin"
+						class="el-menu-item-1"
+					>
 						admin
 					</el-menu-item>
 				</el-submenu>
@@ -77,32 +76,6 @@
 				<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
 			</span>
 		</el-dialog>
-		<el-button style="primary" @click="test">test</el-button>
-
-		<el-menu
-			:default-active="activeIndex"
-			class="el-menu-demo"
-			mode="horizontal"
-			@select="handleSelect"
-		>
-			<el-menu-item index="1">处理中心</el-menu-item>
-			<el-submenu index="2">
-				<template slot="title">我的工作台</template>
-				<el-menu-item index="2-1">选项1</el-menu-item>
-				<el-menu-item index="2-2">选项2</el-menu-item>
-				<el-menu-item index="2-3">选项3</el-menu-item>
-				<el-submenu index="2-4">
-					<template slot="title">选项4</template>
-					<el-menu-item index="2-4-1">选项1</el-menu-item>
-					<el-menu-item index="2-4-2">选项2</el-menu-item>
-					<el-menu-item index="2-4-3">选项3</el-menu-item>
-				</el-submenu>
-			</el-submenu>
-			<el-menu-item index="3" disabled>消息中心</el-menu-item>
-			<el-menu-item index="4"
-				><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item
-			>
-		</el-menu>
 	</el-container>
 </template>
 
@@ -154,28 +127,12 @@ export default {
 		handleSelect1(key, keyPath) {
 			this.activeIndex1 = keyPath[keyPath.length - 1];
 			this.activeIndex2 = "";
-
-			console.log(this.activeIndex1);
-			console.log(this.activeIndex2);
 		},
 		handleSelect2(key, keyPath) {
-			console.log(key);
-			console.log(keyPath);
-
 			if (keyPath[0] === "user") {
 				this.activeIndex2 = keyPath[keyPath.length - 1];
 				this.activeIndex1 = "";
-
-				console.log(this.activeIndex1);
-				console.log(this.activeIndex2);
 			}
-		},
-		hello() {
-			console.log("hello world11");
-			this.$http.get("/api/v1/test/hello").then((res) => {
-				console.log(res);
-				console.log(res.data);
-			});
 		},
 		close() {
 			this.$store.commit("user/setLoginDialogVisible", false);
@@ -193,7 +150,7 @@ export default {
 
 <style lang="scss" scoped>
 .el-menu-item-1 {
-	font-size: 20px;
+	font-size: 23px;
 }
 #el-menu-1 {
 	width: 80%;
