@@ -4,17 +4,17 @@ const user = {
 	namespaced: true,
 	//变量data
 	state: {
-		username: "anonymous",
+		username: "anonymous1",
 		avatar: "",
 		introduction: "",
 		roles: [],
 		token: getToken(),
-		idAdmin: false,
+		isAdmin: true,
 		loginDialogVisible: false,
 	},
 	//类似于计算属性computed
 	getters: {
-		hasLoggedIn: (state, getters, rootState) => {
+		hasSignedIn: (state, getters, rootState) => {
 			return state.username !== "anonymous";
 		},
 	},

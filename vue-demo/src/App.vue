@@ -2,36 +2,59 @@
 	<el-container id="main-container">
 		<el-header id="main-header">
 			<el-menu
-				:default-active="activeIndex"
 				id="el-menu-1"
-				mode="horizontal"
-				@select="handleSelect"
+				:default-active="activeIndex1"
+				@select="handleSelect1"
 				router="true"
+				mode="horizontal"
 			>
 				<el-menu-item index="1" route="/Home" class="el-menu-item-1"> Home</el-menu-item>
-				<el-menu-item index="4" route="/demo" class="el-menu-item-1"> Demo</el-menu-item>
-				<el-submenu index="5" route="/about" id="user">
-					<template slot="title"
-						><el-avatar
-							src="https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80"
-						></el-avatar
-					></template>
-					<el-menu-item index="2-4-1" class="el-menu-item-1">选项1</el-menu-item>
-					<el-menu-item index="2-4-2" class="el-menu-item-1">选项2</el-menu-item>
-					<el-menu-item index="2-4-3" class="el-menu-item-1">选项3</el-menu-item>
+				<el-submenu index="2">
+					<template slot="title">我的工作台</template>
+					<el-menu-item index="2-1">选项1</el-menu-item>
+					<el-menu-item index="2-2">选项2</el-menu-item>
+					<el-menu-item index="2-3">选项3</el-menu-item>
 				</el-submenu>
-				<el-menu-item index="6" route="/admin" id="admin" class="el-menu-item-1">
-					Admin</el-menu-item
-				>
+				<el-menu-item index="3" route="/demo" class="el-menu-item-1"> Demo</el-menu-item>
 			</el-menu>
 
-			<el-menu id="el-menu-2" mode="horizontal">
-				<el-menu-item class="el-menu-item-right el-menu-item-1">
+			<el-menu
+				id="el-menu-2"
+				:default-active="activeIndex2"
+				@select="handleSelect2"
+				router="true"
+				mode="horizontal"
+			>
+				<el-menu-item
+					v-if="hasSignedIn === false"
+					index="1"
+					class="el-menu-item-right el-menu-item-1"
+				>
 					注册
 				</el-menu-item>
-				<el-menu-item class="el-menu-item-right el-menu-item-1" @click="showLoginDialog">
+				<el-menu-item
+					v-if="hasSignedIn === false"
+					index="2"
+					class="el-menu-item-right el-menu-item-1"
+					@click="showLoginDialog"
+				>
 					登陆</el-menu-item
 				>
+				<el-submenu v-if="hasSignedIn" index="user" class="el-menu-item-right el-submenu-1">
+					<template slot="title">
+						<el-avatar
+							src="https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80"
+						>
+						</el-avatar>
+					</template>
+					<el-menu-item index="user-1" class="el-menu-item-1">选项1</el-menu-item>
+					<el-menu-item index="user-2" class="el-menu-item-1">选项2</el-menu-item>
+
+					<el-divider v-if="isAdmin"></el-divider>
+					<el-menu-item index="user-3" v-if="isAdmin" route="/admin" class="el-menu-item-1">
+						admin
+					</el-menu-item>
+				</el-submenu>
 			</el-menu>
 			<div style="clear:both"></div>
 			<el-divider id="el-divider-1"></el-divider>
@@ -40,9 +63,6 @@
 		<el-main>
 			<router-view />
 		</el-main>
-		<!-- <el-footer id="main-footer">
-			©Copyright 2019
-		</el-footer> -->
 
 		<el-dialog
 			title="提示"
@@ -57,9 +77,32 @@
 				<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
 			</span>
 		</el-dialog>
-
-		{{ hasLoggedIn }}
 		<el-button style="primary" @click="test">test</el-button>
+
+		<el-menu
+			:default-active="activeIndex"
+			class="el-menu-demo"
+			mode="horizontal"
+			@select="handleSelect"
+		>
+			<el-menu-item index="1">处理中心</el-menu-item>
+			<el-submenu index="2">
+				<template slot="title">我的工作台</template>
+				<el-menu-item index="2-1">选项1</el-menu-item>
+				<el-menu-item index="2-2">选项2</el-menu-item>
+				<el-menu-item index="2-3">选项3</el-menu-item>
+				<el-submenu index="2-4">
+					<template slot="title">选项4</template>
+					<el-menu-item index="2-4-1">选项1</el-menu-item>
+					<el-menu-item index="2-4-2">选项2</el-menu-item>
+					<el-menu-item index="2-4-3">选项3</el-menu-item>
+				</el-submenu>
+			</el-submenu>
+			<el-menu-item index="3" disabled>消息中心</el-menu-item>
+			<el-menu-item index="4"
+				><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item
+			>
+		</el-menu>
 	</el-container>
 </template>
 
@@ -70,20 +113,28 @@ export default {
 	name: "App",
 	data() {
 		return {
-			activeIndex: "1",
+			activeIndex1: "",
+			activeIndex2: "",
 		};
 	},
 	created() {
 		//在页面加载时读取sessionStorage里的状态信息
-		if (sessionStorage.getItem("activeIndex")) {
-			this.activeIndex = sessionStorage.getItem("activeIndex");
+		if (sessionStorage.getItem("activeIndex1")) {
+			this.activeIndex1 = sessionStorage.getItem("activeIndex1");
+		}
+		if (sessionStorage.getItem("activeIndex2")) {
+			this.activeIndex2 = sessionStorage.getItem("activeIndex2");
 		}
 
 		//在页面刷新时将vuex里的信息保存到sessionStorage里
 		window.addEventListener("beforeunload", () => {
-			console.log(this.activeIndex);
-			sessionStorage.setItem("activeIndex", this.activeIndex);
+			sessionStorage.setItem("activeIndex1", this.activeIndex1);
+			sessionStorage.setItem("activeIndex2", this.activeIndex2);
 		});
+
+		if (this.activeIndex1 === "" && this.activeIndex2 === "") {
+			this.activeIndex1 = 1;
+		}
 	},
 	computed: {
 		// ...mapGetters("people", ["getPeople", "getPeopleByAge"]),
@@ -92,13 +143,32 @@ export default {
 			return this.$store.state.user.loginDialogVisible;
 		},
 		// 方式2
-		hasLoggedIn() {
-			return this.$store.getters["user/hasLoggedIn"];
+		hasSignedIn() {
+			return this.$store.getters["user/hasSignedIn"];
+		},
+		isAdmin() {
+			return this.$store.state.user.isAdmin;
 		},
 	},
 	methods: {
-		handleSelect(key, keyPath) {
-			this.activeIndex = keyPath[0];
+		handleSelect1(key, keyPath) {
+			this.activeIndex1 = keyPath[keyPath.length - 1];
+			this.activeIndex2 = "";
+
+			console.log(this.activeIndex1);
+			console.log(this.activeIndex2);
+		},
+		handleSelect2(key, keyPath) {
+			console.log(key);
+			console.log(keyPath);
+
+			if (keyPath[0] === "user") {
+				this.activeIndex2 = keyPath[keyPath.length - 1];
+				this.activeIndex1 = "";
+
+				console.log(this.activeIndex1);
+				console.log(this.activeIndex2);
+			}
 		},
 		hello() {
 			console.log("hello world11");
@@ -108,7 +178,7 @@ export default {
 			});
 		},
 		close() {
-			console.log("close");
+			this.$store.commit("user/setLoginDialogVisible", false);
 		},
 		showLoginDialog() {
 			this.$store.commit("user/setLoginDialogVisible", true);
@@ -138,9 +208,17 @@ export default {
 		float: right;
 		border: none;
 	}
+	.el-submenu-1 {
+		float: right;
+		border: none;
+		.el-menu-item {
+			border: none;
+		}
+	}
 }
 
-#el-divider-1 {
+#el-divider-1,
+#el-divider-2 {
 	margin-top: 0%;
 	margin-bottom: 0%;
 }

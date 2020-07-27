@@ -45,7 +45,7 @@ export default {
 			this.activeIndex = sessionStorage.getItem("demo-activeIndex");
 		}
 
-		console.log(this.activeIndex);
+		// console.log(this.activeIndex);
 
 		//在页面刷新时将vuex里的信息保存到sessionStorage里
 		window.addEventListener("beforeunload", () => {
