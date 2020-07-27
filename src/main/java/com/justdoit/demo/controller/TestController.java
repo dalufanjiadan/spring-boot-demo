@@ -24,6 +24,7 @@ import javax.validation.Valid;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.justdoit.demo.config.AppProperties;
 import com.justdoit.demo.kafka.KafKaProducerService;
 import com.justdoit.demo.mapper.UserMapper;
 import com.justdoit.demo.model.RestResponse;
@@ -85,11 +86,14 @@ public class TestController {
 	@Autowired
 	private ValidateCode validateCode;
 
+	@Autowired
+	private AppProperties appProperties;
+
 	@ApiOperation(value = "1 hello")
 	@GetMapping("/hello")
 	public Object hello() {
 
-		System.out.println(Integer.MAX_VALUE);
+		System.out.println(appProperties);
 
 		return "hello world";
 

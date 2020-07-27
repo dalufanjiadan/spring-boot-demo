@@ -4,7 +4,7 @@ const user = {
 	namespaced: true,
 	//变量data
 	state: {
-		username: "anonymous1",
+		username: "anonymous",
 		avatar: "",
 		introduction: "",
 		roles: [],
