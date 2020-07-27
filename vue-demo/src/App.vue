@@ -73,7 +73,7 @@
 			<span>需要注意的是内容是默认不居中的</span>
 			<el-divider><i class="el-icon-user"></i></el-divider>
 			<div style="text-align:center">
-				<a href="https://icons8.com/icon/12599/github"
+				<a :href="oauth2Login('github')"
 					><img src="https://b-gold-cdn.xitu.io/v3/static/img/github.547dd8a.svg" />
 				</a>
 			</div>
@@ -87,6 +87,7 @@
 
 <script>
 // import { mapGetters, mapActions } from "vuex";
+import { api } from "@/api/auth";
 
 export default {
 	name: "App",
@@ -145,6 +146,9 @@ export default {
 		},
 		showLoginDialog() {
 			this.$store.commit("user/setLoginDialogVisible", true);
+		},
+		oauth2Login(thirdParty) {
+			return api.getOauth2Uri(thirdParty);
 		},
 	},
 
