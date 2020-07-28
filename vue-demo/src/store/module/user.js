@@ -15,7 +15,8 @@ const user = {
 	//类似于计算属性computed
 	getters: {
 		hasSignedIn: (state, getters, rootState) => {
-			return state.username !== "anonymous";
+			// return state.username !== "anonymous";
+			return state.token;
 		},
 	},
 	//方法methods
@@ -25,6 +26,12 @@ const user = {
 		},
 		setToken(state, token) {
 			state.token = token;
+		},
+		setUsername(state, username) {
+			state.username = username;
+		},
+		setImageUrl(state, imageUrl) {
+			state.avatar = imageUrl;
 		},
 	},
 	//异步操作

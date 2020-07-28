@@ -36,11 +36,13 @@
 				>
 				<el-submenu v-if="hasSignedIn" index="user" class="el-menu-item-right el-submenu-1">
 					<template slot="title">
-						<el-avatar
-							src="https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80"
-						>
-						</el-avatar>
+						<el-avatar :src="this.$store.state.user.avatar"> </el-avatar>
 					</template>
+					<div style="text-align:center">
+						{{ this.$store.state.user.username }}
+					</div>
+					<!-- <el-divider></el-divider> -->
+					<hr>
 					<el-menu-item index="user-1" class="el-menu-item-1">选项1</el-menu-item>
 					<el-menu-item index="user-2" class="el-menu-item-1">选项2</el-menu-item>
 
@@ -93,7 +95,7 @@ export default {
 	name: "App",
 	data() {
 		return {
-			activeIndex1: "",
+			activeIndex1: "home",
 			activeIndex2: "",
 		};
 	},
@@ -114,6 +116,9 @@ export default {
 		if (sessionStorage.getItem("activeIndex2")) {
 			this.activeIndex2 = sessionStorage.getItem("activeIndex2");
 		}
+
+		// 获取用户信息
+		this.getAndSetUserInfo();
 
 		//在页面刷新时将vuex里的信息保存到sessionStorage里
 		window.addEventListener("beforeunload", () => {
@@ -167,6 +172,12 @@ export default {
 			let r = window.location.search.substr(1).match(reg);
 			if (r != null) return unescape(r[2]);
 			return null;
+		},
+		getAndSetUserInfo() {
+			api.getUserInfo().then((res) => {
+				this.$store.commit("user/setUsername", res.name);
+				this.$store.commit("user/setImageUrl", res.imageUrl);
+			});
 		},
 	},
 

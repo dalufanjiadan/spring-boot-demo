@@ -13,11 +13,12 @@ export function getOauth2Uri(thirdParty) {
 
 export function getUserInfo() {
 	return request({
-		url: "/test/hello",
+		url: "/api/v1/user/me",
 		method: "get",
 	});
 }
 
 export const api = {
 	getOauth2Uri,
+	getUserInfo,
 };
