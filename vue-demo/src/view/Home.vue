@@ -32,7 +32,6 @@ export default {
 		};
 	},
 	created() {
-		console.log(this.$store.state.count);
 	},
 	computed: {
 		...mapGetters("people", ["getPeople", "getPeopleByAge"]),

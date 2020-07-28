@@ -98,6 +98,15 @@ export default {
 		};
 	},
 	created() {
+		// 获取token
+		let token = this.getQueryString("token");
+		if (token) {
+			localStorage.setItem("token", token);
+		} else {
+			token = localStorage.getItem("token");
+		}
+		this.$store.commit("user/setToken", token);
+
 		//在页面加载时读取sessionStorage里的状态信息
 		if (sessionStorage.getItem("activeIndex1")) {
 			this.activeIndex1 = sessionStorage.getItem("activeIndex1");
@@ -148,7 +157,16 @@ export default {
 			this.$store.commit("user/setLoginDialogVisible", true);
 		},
 		oauth2Login(thirdParty) {
+			this.activeIndex1 = "home";
+			this.activeIndex2 = "";
+
 			return api.getOauth2Uri(thirdParty);
+		},
+		getQueryString(name) {
+			let reg = `(^|&)${name}=([^&]*)(&|$)`;
+			let r = window.location.search.substr(1).match(reg);
+			if (r != null) return unescape(r[2]);
+			return null;
 		},
 	},
 

@@ -8,7 +8,7 @@ const user = {
 		avatar: "",
 		introduction: "",
 		roles: [],
-		token: getToken(),
+		token: null,
 		isAdmin: true,
 		loginDialogVisible: false,
 	},
@@ -22,6 +22,9 @@ const user = {
 	mutations: {
 		setLoginDialogVisible(state, loginDialogVisible) {
 			state.loginDialogVisible = loginDialogVisible;
+		},
+		setToken(state, token) {
+			state.token = token;
 		},
 	},
 	//异步操作
