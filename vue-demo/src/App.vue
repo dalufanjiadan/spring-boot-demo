@@ -32,28 +32,33 @@
 					class="el-menu-item-right el-menu-item-1"
 					@click="showLoginDialog"
 				>
-					登陆</el-menu-item
-				>
+					登陆
+				</el-menu-item>
 				<el-submenu v-if="hasSignedIn" index="user" class="el-menu-item-right el-submenu-1">
 					<template slot="title">
 						<el-avatar :src="this.$store.state.user.avatar"> </el-avatar>
 					</template>
-					<div style="text-align:center">
+					<div style="text-align:center font-size: 12px">
 						{{ this.$store.state.user.username }}
 					</div>
 					<!-- <el-divider></el-divider> -->
-					<hr>
-					<el-menu-item index="user-1" class="el-menu-item-1">选项1</el-menu-item>
-					<el-menu-item index="user-2" class="el-menu-item-1">选项2</el-menu-item>
+					<hr />
+					<el-menu-item index="user-1" class="el-menu-item-1-">选项1</el-menu-item>
+					<el-menu-item index="user-2" class="el-menu-item-1-">选项2</el-menu-item>
 
 					<el-divider v-if="isAdmin"></el-divider>
 					<el-menu-item
 						index="user-3"
 						v-if="isAdmin"
 						route="/admin"
-						class="el-menu-item-1"
+						class="el-menu-item-1-"
 					>
 						admin
+					</el-menu-item>
+
+					<hr />
+					<el-menu-item index="user-signout" class="el-menu-item-1-" @click="signout">
+						登出
 					</el-menu-item>
 				</el-submenu>
 			</el-menu>
@@ -179,6 +184,12 @@ export default {
 				this.$store.commit("user/setImageUrl", res.imageUrl);
 			});
 		},
+		signout() {
+			console.log("sign out");
+			// 删除本地token
+			localStorage.removeItem("token");
+			this.$store.commit("user/setToken", null);
+		},
 	},
 
 	props: {
@@ -189,7 +200,8 @@ export default {
 
 <style lang="scss" scoped>
 .el-menu-item-1 {
-	font-size: 23px;
+	font-size: 24px;
+	font-weight: 600;
 }
 #el-menu-1 {
 	width: 80%;
