@@ -67,6 +67,7 @@
 		</el-header>
 
 		<el-main>
+			<el-buttone @click="test">aaa</el-buttone>
 			<router-view />
 		</el-main>
 
@@ -95,13 +96,14 @@
 <script>
 // import { mapGetters, mapActions } from "vuex";
 import { api } from "@/api/auth";
+import { MessageBox, Message } from "element-ui";
 
 export default {
 	name: "App",
 	data() {
 		return {
-			activeIndex1: "home",
-			activeIndex2: "",
+			activeIndex1: "",
+			activeIndex2: "asdf",
 		};
 	},
 	created() {
@@ -115,24 +117,24 @@ export default {
 		this.$store.commit("user/setToken", token);
 
 		//在页面加载时读取sessionStorage里的状态信息
-		if (sessionStorage.getItem("activeIndex1")) {
-			this.activeIndex1 = sessionStorage.getItem("activeIndex1");
+		if (localStorage.getItem("activeIndex1")) {
+			this.activeIndex1 = localStorage.getItem("activeIndex1");
 		}
-		if (sessionStorage.getItem("activeIndex2")) {
-			this.activeIndex2 = sessionStorage.getItem("activeIndex2");
+		if (localStorage.getItem("activeIndex2")) {
+			this.activeIndex2 = localStorage.getItem("activeIndex2");
 		}
 
 		// 获取用户信息
 		this.getAndSetUserInfo();
 
-		//在页面刷新时将vuex里的信息保存到sessionStorage里
+		//在页面刷新时将vuex里的信息保存到localStorage里
 		window.addEventListener("beforeunload", () => {
-			sessionStorage.setItem("activeIndex1", this.activeIndex1);
-			sessionStorage.setItem("activeIndex2", this.activeIndex2);
+			localStorage.setItem("activeIndex1", this.activeIndex1);
+			localStorage.setItem("activeIndex2", this.activeIndex2);
 		});
 
 		if (this.activeIndex1 === "" && this.activeIndex2 === "") {
-			this.activeIndex1 = 1;
+			this.activeIndex1 = "home";
 		}
 	},
 	computed: {
@@ -150,6 +152,7 @@ export default {
 		},
 	},
 	methods: {
+		beforeunloadFn(e) {},
 		handleSelect1(key, keyPath) {
 			this.activeIndex1 = keyPath[keyPath.length - 1];
 			this.activeIndex2 = "";
@@ -167,9 +170,6 @@ export default {
 			this.$store.commit("user/setLoginDialogVisible", true);
 		},
 		oauth2Login(thirdParty) {
-			this.activeIndex1 = "home";
-			this.activeIndex2 = "";
-
 			return api.getOauth2Uri(thirdParty);
 		},
 		getQueryString(name) {
@@ -189,6 +189,14 @@ export default {
 			// 删除本地token
 			localStorage.removeItem("token");
 			this.$store.commit("user/setToken", null);
+		},
+
+		test() {
+			Message({
+				message: this.activeIndex1 + "---" + this.activeIndex2,
+				type: "info",
+				duration: 5 * 1000,
+			});
 		},
 	},
 
