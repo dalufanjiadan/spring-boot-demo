@@ -74,6 +74,11 @@ const routes = [
 				name: "deleteUser",
 				component: () => import("../view/user/FindUser.vue"),
 			},
+			{
+				path: "/admin-log",
+				name: "log",
+				component: () => import("../view/admin/Log.vue"),
+			},
 		],
 	},
 ];

@@ -1,50 +1,20 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import people from "./module/people";
-import test from "./module/Test";
 import user from "./module/user";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
 	//变量data
-	state: {
-		count: 100,
-	},
+	state: {},
 	//类似于计算属性computed
-	getters: {
-		getPeople: (state) => {
-			return state.count;
-		},
-	},
+	getters: {},
 	//方法methods
-	mutations: {
-		add(state) {
-			state.count++;
-		},
-		sub(state) {
-			state.count--;
-		},
-		mul(state, payload) {
-			state.count *= 10;
-		},
-		div(state, payload) {
-			state.count /= 10;
-		},
-	},
+	mutations: {},
 	//异步操作
-	actions: {
-		div(context) {
-			context.commit({
-				type: "div",
-				amount: 10,
-			});
-		},
-	},
+	actions: {},
 	//模块
 	modules: {
-		people,
-		test,
 		user,
 	},
 });

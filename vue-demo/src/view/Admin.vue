@@ -50,6 +50,10 @@
 						<el-menu-item index="4-2">选项2</el-menu-item>
 					</el-menu-item-group>
 				</el-submenu>
+				<el-submenu index="5">
+					<template slot="title"><i class="el-icon-menu"></i>日志操作</template>
+					<el-menu-item index="5-1" route="/admin-log">查看日志</el-menu-item>
+				</el-submenu>
 			</el-menu>
 		</el-aside>
 
