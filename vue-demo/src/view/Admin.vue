@@ -1,7 +1,13 @@
 <template>
 	<el-container>
 		<el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-			<el-menu :default-openeds="['1']" router="true" unique-opened="true">
+			<el-menu
+				router="true"
+				@select="handleSelect"
+				:default-openeds="openeds"
+				:default-active="activeIndex"
+				unique-opened="true"
+			>
 				<el-submenu index="1">
 					<template slot="title"><i class="el-icon-message"></i>用户管理</template>
 					<el-menu-item-group>
@@ -10,9 +16,6 @@
 						<el-menu-item index="1-2" route="/admin-user-delete">删</el-menu-item>
 						<el-menu-item index="1-3" route="/admin-user-update">改</el-menu-item>
 						<el-menu-item index="1-4" route="/admin-user-find">查</el-menu-item>
-					</el-menu-item-group>
-					<el-menu-item-group title="分组2">
-						<el-menu-item index="1-3">选项3</el-menu-item>
 					</el-menu-item-group>
 					<el-submenu index="1-4">
 						<template slot="title">选项4</template>
@@ -66,6 +69,7 @@
 <style></style>
 
 <script>
+import { MessageBox, Message } from "element-ui";
 export default {
 	data() {
 		const item = {
@@ -74,8 +78,27 @@ export default {
 			address: "上海市普陀区金沙江路 1518 弄",
 		};
 		return {
+			openeds: null,
+			activeIndex: null,
 			tableData: Array(20).fill(item),
 		};
+	},
+	created() {
+		//在页面刷新时将vuex里的信息保存到localStorage里
+		window.addEventListener("beforeunload", () => {
+			localStorage.setItem("admin-activeIndex", this.activeIndex);
+			localStorage.setItem("admin-openeds", JSON.stringify(this.openeds));
+		});
+		if (localStorage.getItem("admin-activeIndex")) {
+			this.activeIndex = localStorage.getItem("admin-activeIndex");
+			this.openeds = JSON.parse(localStorage.getItem("admin-openeds"));
+		}
+	},
+	methods: {
+		handleSelect(key, keyPath) {
+			this.openeds = keyPath;
+			this.activeIndex = key;
+		},
 	},
 };
 </script>
