@@ -1,26 +1,35 @@
 <template>
-	<el-container id="div-1">
-		<div class="infinite-list-wrapper" style="overflow:auto">
-			<ul class="list" v-infinite-scroll="load" infinite-scroll-disabled="disabled">
-				<li v-for="(i, index) in count" class="list-item" :key="index">{{ i }}</li>
-			</ul>
-			<p v-if="loading">加载中...</p>
-			<p v-if="noMore">没有更多了</p>
-		</div>
-	</el-container>
+	<el-main id="main">
+		<ul
+			id="ul-1"
+			class="infinite-list"
+			infinite-scroll-disabled="disabled"
+			v-infinite-scroll="load"
+			style="overflow:auto"
+		>
+			<li v-for="(line, index) in data" class="infinite-list-item" :key="index">
+				{{ index + "==" + line }}
+			</li>
+		</ul>
+		<p v-if="loading">加载中...</p>
+		<p v-if="noMore">没有更多了</p>
+	</el-main>
 </template>
 
 <script>
+import { api } from "@/api/admin/log";
+import { MessageBox, Message } from "element-ui";
 export default {
 	data() {
 		return {
-			count: 10,
+			count: 0,
+			data: [],
 			loading: false,
 		};
 	},
 	computed: {
 		noMore() {
-			return this.count >= 20;
+			return this.data.length >= 50;
 		},
 		disabled() {
 			return this.loading || this.noMore;
@@ -30,22 +39,50 @@ export default {
 		load() {
 			this.loading = true;
 			setTimeout(() => {
-				this.count += 2;
 				this.loading = false;
-			}, 2000);
+				api.getLog().then((res) => {
+					// Array(20).fill({ a: 1 })
+					this.data = this.data.concat(res.data);
+					// this.message(this.data);
+				});
+			}, 500);
+		},
+
+		message(data) {
+			Message({
+				message: data,
+				type: "info",
+				duration: 5 * 1000,
+			});
 		},
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-#div-1 {
-	background-color:yellowgreen;
+* {
+	padding: 0%;
+	margin: 0%;
 }
 
-#h1-1 {
-	color: aqua;
-	text-align: center;
-	margin: 0% auto;
+#main {
+	padding: 2%;
+	height: 800px;
+}
+
+#ul-1 {
+	height: 700px;
+	padding-inline-start: 0%;
+	list-style: none;
+	// width: 90%;
+	overflow: auto;
+	// width: 5000px; //设置足够的宽度
+	li {
+		// display: inline-block;
+		// background-color: wheat;
+		width: 3000px;
+		margin-bottom: 5px;
+		font-size: 18px;
+	}
 }
 </style>
