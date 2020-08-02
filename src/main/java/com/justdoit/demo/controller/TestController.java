@@ -3,6 +3,7 @@ package com.justdoit.demo.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -56,6 +57,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.io.FileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -93,10 +96,18 @@ public class TestController {
 	@GetMapping("/hello")
 	public Object hello() {
 
-		System.out.println(appProperties);
+		String property = System.getProperty("user.dir");
 
-		return "hello world";
+		List<String> lines = FileUtil.readUtf8Lines(property + "/logs/spring-boot-logger.log");
 
+		return RestResponse.ok(lines.subList(0, 10));
+
+	}
+
+	@PostMapping("/hello1")
+	public void name(@RequestBody Map<String, Object> body) {
+
+		System.out.println(body);
 	}
 
 	@GetMapping("/hello1")

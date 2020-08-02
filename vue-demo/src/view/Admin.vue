@@ -1,5 +1,5 @@
 <template>
-	<el-container>
+	<el-container id="container-1">
 		<el-aside width="200px" style="background-color: rgb(238, 241, 246)">
 			<el-menu
 				router="true"
@@ -56,6 +56,7 @@
 				<el-submenu index="5">
 					<template slot="title"><i class="el-icon-menu"></i>日志操作</template>
 					<el-menu-item index="5-1" route="/admin-log">查看日志</el-menu-item>
+					<el-menu-item index="5-2" route="/admin-log2">所有日志</el-menu-item>
 				</el-submenu>
 			</el-menu>
 		</el-aside>

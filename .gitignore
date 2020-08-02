@@ -56,3 +56,6 @@ vue-demo/*.sw?
 
 
 .DS_Store
+
+# 日志
+/logs

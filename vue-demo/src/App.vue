@@ -38,15 +38,18 @@
 					<template slot="title">
 						<el-avatar :src="this.$store.state.user.avatar"> </el-avatar>
 					</template>
-					<div style="text-align:center font-size: 12px">
+					<!-- <div style="text-align:center font-size: 12px">
 						{{ this.$store.state.user.username }}
-					</div>
-					<!-- <el-divider></el-divider> -->
-					<hr />
+					</div> -->
+
+					<el-menu-item index="user-1" class="el-menu-item-1-" disabled="true">{{
+						this.$store.state.user.username
+					}}</el-menu-item>
+
+					<el-tag>{{this.$store.state.user.username}}</el-tag>
+
 					<el-menu-item index="user-1" class="el-menu-item-1-">选项1</el-menu-item>
 					<el-menu-item index="user-2" class="el-menu-item-1-">选项2</el-menu-item>
-
-					<el-divider v-if="isAdmin"></el-divider>
 					<el-menu-item
 						index="user-3"
 						v-if="isAdmin"
@@ -56,7 +59,6 @@
 						admin
 					</el-menu-item>
 
-					<hr />
 					<el-menu-item index="user-signout" class="el-menu-item-1-" @click="signout">
 						登出
 					</el-menu-item>
@@ -67,7 +69,6 @@
 		</el-header>
 
 		<el-main>
-			<el-buttone @click="test">aaa</el-buttone>
 			<router-view />
 		</el-main>
 
@@ -217,19 +218,12 @@ export default {
 	border: none;
 }
 #el-menu-2 {
-	width: 20%;
+	width: 10%;
 	float: right;
 	border: none;
 	.el-menu-item-right {
 		float: right;
 		border: none;
-	}
-	.el-submenu-1 {
-		float: right;
-		border: none;
-		.el-menu-item {
-			border: none;
-		}
 	}
 }
 

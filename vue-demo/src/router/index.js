@@ -79,6 +79,11 @@ const routes = [
 				name: "log",
 				component: () => import("../view/admin/Log.vue"),
 			},
+			{
+				path: "/admin-log2",
+				name: "log2",
+				component: () => import("../view/admin/Log2.vue"),
+			},
 		],
 	},
 ];
