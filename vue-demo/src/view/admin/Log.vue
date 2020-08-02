@@ -7,8 +7,9 @@
 			v-infinite-scroll="load"
 			style="overflow:auto"
 		>
-			<li v-for="(line, index) in data" class="infinite-list-item" :key="index">
-				{{ index + "==" + line }}
+			<li v-for="(line, i) in data" class="infinite-list-item" :key="i">
+				<el-tag size="medium" style="width: 1rem; text-align:center"> {{ i + 1 }}</el-tag>
+				{{ line }}
 			</li>
 		</ul>
 		<p v-if="loading">加载中...</p>
@@ -29,7 +30,7 @@ export default {
 	},
 	computed: {
 		noMore() {
-			return this.data.length >= 50;
+			return this.data.length >= 200;
 		},
 		disabled() {
 			return this.loading || this.noMore;
@@ -71,18 +72,14 @@ export default {
 }
 
 #ul-1 {
-	height: 700px;
+	// height: 700px;
 	padding-inline-start: 0%;
 	list-style: none;
-	// width: 90%;
 	overflow: auto;
-	// width: 5000px; //设置足够的宽度
 	li {
-		// display: inline-block;
-		// background-color: wheat;
-		width: 3000px;
-		margin-bottom: 5px;
+		display: inline-block;
 		font-size: 18px;
+		width: max-content;
 	}
 }
 </style>
