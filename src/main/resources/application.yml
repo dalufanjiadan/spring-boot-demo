@@ -116,6 +116,7 @@ kafka:
             user: user
 
 enable:
+    maintain: false
     security: false
     redis: false
     kafka: false

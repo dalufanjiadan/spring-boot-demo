@@ -1,6 +1,7 @@
 import axios from "axios";
 import { MessageBox, Message } from "element-ui";
 import store from "@/store";
+import router from "@/router";
 // import { getToken } from '@/utils/auth'
 
 // create an axios instance
@@ -44,6 +45,13 @@ service.interceptors.response.use(
 	 */
 	(response) => {
 		const res = response.data;
+		if (res.code === 5) {
+			// 维护中
+
+			router.push({
+				path: `/5`,
+			});
+		}
 
 		return res;
 

@@ -1,5 +1,9 @@
 <template>
-	<h1>home</h1>
+	<div>
+		<h1>
+			维护中...
+		</h1>
+	</div>
 </template>
 
 <script>

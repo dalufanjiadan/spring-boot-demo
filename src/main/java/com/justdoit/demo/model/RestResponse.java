@@ -10,24 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
-enum Status {
-
-	OK(0, "ok"), //
-	BAD_REQUEST(1, "bad request"), //
-	VALIDATION_EXCEPTION(2, "validation exception"), //
-	EXCEPTION(3, "exception"), //
-	DUPLICATE_ENTITY(4, "duplicate entity"), //
-	UNAUTHORIZED(401, "401 unauthorized"), //
-	ACCESS_DENIED(403, "403 access denied"), //
-	NOT_FOUND(404, "404 not found"), //
-	BAD_CREDENTIALS(499, "499 bad credentials. Invalid username/password supplied");
-
-	private Integer code;
-	private String message;
-}
-
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -37,7 +19,27 @@ public class RestResponse<T> {
 	private String message;
 	private T data;
 
-    // @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	@Getter
+	@AllArgsConstructor
+	enum Status {
+
+		OK(0, "ok"), //
+		BAD_REQUEST(1, "bad request"), //
+		VALIDATION_EXCEPTION(2, "validation exception"), //
+		EXCEPTION(3, "exception"), //
+		DUPLICATE_ENTITY(4, "duplicate entity"), //
+		// MAINTAIN(5, "维护中"), //
+		UNAUTHORIZED(401, "401 unauthorized"), //
+		ACCESS_DENIED(403, "403 access denied"), //
+		NOT_FOUND(404, "404 not found"), //
+		BAD_CREDENTIALS(499, "499 bad credentials. Invalid username/password supplied");
+
+		private Integer code;
+		private String message;
+	}
+
+	// @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd
+	// HH:mm:ss")
 	private LocalDateTime timestamp = LocalDateTime.now();
 
 	public static <T> RestResponse<T> ok() {
