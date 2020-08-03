@@ -89,7 +89,7 @@ CREATE TABLE `user_cluster`(
 	`type` tinyint NOT NULL COMMENT '账号/角色/设备，0/1/2',
 	`filters` text NOT NULL COMMENT '该人群所有过滤条件',
 	`set_operation` varchar(20) NOT NULL COMMENT '集合操作',
-	`share_with` varchar(255)  NULL COMMENT '分享，他人可见',
+	`share_with` varchar(255) NULL COMMENT '分享，他人可见',
 	`sql` text NOT NULL COMMENT '该人群的最终查询SQL',
 	`status` tinyint NOT NULL COMMENT '该人群的的计算状态 查询中/查询完成 0/1',
 	`result` text NOT NULL COMMENT '该人群的最终查询结果',
@@ -97,4 +97,27 @@ CREATE TABLE `user_cluster`(
 	`created_at` varchar(19) DEFAULT NULL COMMENT '创建时间',
 	`updated_at` varchar(19) DEFAULT NULL COMMENT '更新时间',
 	`deleted_at` varchar(19) DEFAULT NULL COMMENT '删除时间'
+) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `user_cluster_track_task`(
+	`id` bigint(20) AUTO_INCREMENT PRIMARY KEY,
+	`user_cluster_id` bigint(20) NOT NULL COMMENT '分群ID',
+	`date_start` varchar(19) DEFAULT NULL COMMENT '任务开始日期',
+	`date_end` varchar(19) DEFAULT NULL COMMENT '任务结束日期',
+	`status` tinyint NOT NULL COMMENT '任务状态 未开始/追踪中/已结束 0/1/2',
+	`created_at` varchar(19) DEFAULT NULL COMMENT '创建时间',
+	`updated_at` varchar(19) DEFAULT NULL COMMENT '更新时间',
+	`deleted_at` varchar(19) DEFAULT NULL COMMENT '删除时间'
+) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `user_cluster_track_task_data`(
+	`id` bigint(20) AUTO_INCREMENT PRIMARY KEY,
+	`task_id` bigint(20) NOT NULL COMMENT '分群ID',
+	`date` varchar(19) DEFAULT NULL COMMENT '日期',
+	`a` double DEFAULT NULL COMMENT '数据a',
+	`b` double DEFAULT NULL COMMENT '数据b',
+	`created_at` varchar(19) DEFAULT NULL COMMENT '创建时间',
+	`updated_at` varchar(19) DEFAULT NULL COMMENT '更新时间',
+	`deleted_at` varchar(19) DEFAULT NULL COMMENT '删除时间',
+	UNIQUE INDEX taskid_date (task_id, date)
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
