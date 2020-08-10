@@ -45,12 +45,16 @@ service.interceptors.response.use(
 	 */
 	(response) => {
 		const res = response.data;
-		if (res.code === 5) {
+		if (res.code === 503) {
 			// 维护中
 
 			router.push({
-				path: `/5`,
+				path: `/503`,
 			});
+		}
+		if (res.code === 401) {
+			// 未登陆/登陆过期
+			
 		}
 
 		return res;

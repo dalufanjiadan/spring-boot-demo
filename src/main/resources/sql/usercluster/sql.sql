@@ -114,10 +114,30 @@ CREATE TABLE `user_cluster_track_task_data`(
 	`id` bigint(20) AUTO_INCREMENT PRIMARY KEY,
 	`task_id` bigint(20) NOT NULL COMMENT '分群ID',
 	`date` varchar(19) DEFAULT NULL COMMENT '日期',
-	`a` double DEFAULT NULL COMMENT '数据a',
-	`b` double DEFAULT NULL COMMENT '数据b',
-	`created_at` varchar(19) DEFAULT NULL COMMENT '创建时间',
-	`updated_at` varchar(19) DEFAULT NULL COMMENT '更新时间',
-	`deleted_at` varchar(19) DEFAULT NULL COMMENT '删除时间',
+	`day_login_cnt` double DEFAULT NULL COMMENT '活跃人数',
+	`day_new_cnt` double DEFAULT NULL COMMENT '新增人数',
+	`day_pay_money` double DEFAULT NULL COMMENT '充值金额',
+	`day_pay_cnt` double DEFAULT NULL COMMENT '充值人数',
+	`total_login_cnt` double DEFAULT NULL COMMENT '累计活跃人数',
+	`total_new_cnt` double DEFAULT NULL COMMENT '累计新增人数',
+	`total_pay_money` double DEFAULT NULL COMMENT '累计充值金额',
+	`total_pay_cnt` double DEFAULT NULL COMMENT '累计充值人数',
+	`created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '创建时间',
+	`updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '更新时间',
+	`deleted_at` datetime(6) DEFAULT NULL COMMENT '删除时间',
 	UNIQUE INDEX taskid_date (task_id, date)
+) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `user_cluster_track_task_data_retained_user`(
+	`id` bigint(20) AUTO_INCREMENT PRIMARY KEY,
+	`task_id` bigint(20) NOT NULL COMMENT '任务ID',
+	`date_new_user` varchar(19) DEFAULT NULL COMMENT '观察新增用户日期',
+	`new_cnt` double DEFAULT NULL COMMENT '新增人数',
+	`date_lty` varchar(19) DEFAULT NULL COMMENT '计算留存日期',
+	`total_pay_money` double DEFAULT NULL COMMENT '目标新增用户，累计收入',
+	`ltv` double DEFAULT 0 COMMENT 'ltv',
+	`created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT '创建时间',
+	`updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '更新时间',
+	`deleted_at` datetime(6) DEFAULT NULL COMMENT '删除时间',
+	UNIQUE INDEX taskid_date_ (task_id, date_new_user, date_retained_user)
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;

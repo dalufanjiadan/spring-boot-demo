@@ -98,6 +98,9 @@ public class TestController {
 
 		String property = System.getProperty("user.dir");
 
+		
+		
+		
 		List<String> lines = FileUtil.readUtf8Lines(property + "/logs/spring-boot-logger.log");
 
 		return RestResponse.ok(lines.subList(0, 10));

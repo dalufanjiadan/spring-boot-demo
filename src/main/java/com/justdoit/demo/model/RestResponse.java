@@ -28,7 +28,7 @@ public class RestResponse<T> {
 		VALIDATION_EXCEPTION(2, "validation exception"), //
 		EXCEPTION(3, "exception"), //
 		DUPLICATE_ENTITY(4, "duplicate entity"), //
-		// MAINTAIN(5, "维护中"), //
+		// MAINTAIN(503, "维护中"), //
 		UNAUTHORIZED(401, "401 unauthorized"), //
 		ACCESS_DENIED(403, "403 access denied"), //
 		NOT_FOUND(404, "404 not found"), //

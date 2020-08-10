@@ -16,7 +16,7 @@ const user = {
 	getters: {
 		hasSignedIn: (state, getters, rootState) => {
 			// return state.username !== "anonymous";
-			return state.token !== null;
+			return state.username !== "anonymous";
 		},
 	},
 	//方法methods

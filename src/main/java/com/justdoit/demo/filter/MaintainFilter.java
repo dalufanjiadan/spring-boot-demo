@@ -32,7 +32,7 @@ public class MaintainFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
-		ImmutableMap<String, Object> result = ImmutableMap.of("code", 5, "message", "维护中");
+		ImmutableMap<String, Object> result = ImmutableMap.of("code", 503, "message", "维护中");
 
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(om.writeValueAsString(result));

@@ -85,9 +85,9 @@ const routes = [
 	},
 
 	{
-		path: "/5",
+		path: "/503",
 		name: "maintain",
-		component: () => import("../view/error/5.vue"),
+		component: () => import("../view/error/503.vue"),
 	},
 ];
 
