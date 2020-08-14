@@ -141,3 +141,29 @@ CREATE TABLE `user_cluster_track_task_data_retained_user`(
 	`deleted_at` datetime(6) DEFAULT NULL COMMENT '删除时间',
 	UNIQUE INDEX taskid_date_ (task_id, date_new_user, date_retained_user)
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
+
+
+SELECT
+    ds,
+        sum(case last_login_date when '2020-07-01' then 1 else 0 end) as dayLoginCnt,
+        sum(case account_regdate when '2020-07-01' then 1 else 0 end) as dayNewCnt,
+        sum(day_pay_money) as dayPayMoney,
+        sum(case  when day_pay_times>0 then 1 else 0 end) as dayPayCnt,
+        sum(case  when day_pay_times>0 and substr(first_pay_time,1,10)= '2020-07-01' then 1 else 0 end) as dayNewPayCnt,
+        sum(case  when last_login_date >='2020-07-01'  then 1 else 0 end) as totalLoginCnt,
+        sum(case when account_regdate >='2020-07-01'  then 1 else 0 end) as totalNewCnt,
+        count(DISTINCT(case when last_pay_date>='2020-07-01' then account else null end)) as totalPayCnt
+    
+FROM
+        data_analyze_label.dm_label_gamelog_kpi_account_ds
+WHERE
+        ds in ('20200701','20200702','20200703','20200704','20200705')
+        AND op_id in('2145','2785','27775')
+        AND account IN (
+                SELECT
+                        id
+                FROM
+                        db_temp.user_cluster_a06e0fb9_2d94_4c71_83ac_0d0ce9c1130f
+                )
+                
+group by ds
