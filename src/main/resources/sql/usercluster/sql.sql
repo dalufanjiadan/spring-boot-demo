@@ -167,3 +167,73 @@ WHERE
                 )
                 
 group by ds
+
+ select date_add('day',1 ,CAST('2012-12-08' AS date))
+
+
+
+SELECT
+        date,
+        sum(case first_login_date when date then 1 else 0 end) as dayNewCnt,
+        sum(case last_login_date when date then 1 else 0 end) as dayLoginCnt,
+        sum(day_pay_money) as dayPayMoney,
+        sum(case  when day_pay_times>0 then 1 else 0 end) as dayPayCnt,
+        sum(case  when day_pay_times>0 and substr(first_pay_time,1,10) = date then 1 else 0 end) as dayNewPayCnt,
+        sum(case  when last_login_date >='2020-07-01'  then 1 else 0 end) as totalLoginCnt,
+        sum(case  when first_login_date >='2020-07-01'  then 1 else 0 end) as totalNewCnt,
+        count(DISTINCT(case when last_pay_date>='2020-07-01' then account else null end)) as totalPayCnt
+FROM
+        data_analyze_label.dm_label_gamelog_kpi_account_ds
+WHERE
+        ds in ('20200701','20200702','20200703','20200704')
+        -- AND op_id in('2145','2785','27775')
+        AND account IN (
+                SELECT
+                        id
+                FROM
+                        db_temp.user_cluster_a06e0fb9_2d94_4c71_83ac_0d0ce9c1130f
+                )
+                
+group by date
+
+
+
+select  op_id,first_login_date,
+count(distinct pre_account ) as newCnt
+,count(distinct case when login_1_times>0 then pre_account end ) ltv_1
+,count(distinct case when login_2_times>0 then pre_account end ) ltv_2
+,count(distinct case when login_3_times>0 then pre_account end ) ltv_3
+
+from data_analyze_label.dm_label_gamelog_kpi_account_ds
+where game_id=360 
+and ds='20200813'
+and op_id='2106'
+and first_login_date>='2020-07-01'
+and first_login_date<='2020-08-01'
+group by op_id,first_login_date
+order by first_login_date
+
+
+
+SELECT
+        first_login_date,
+       count(*) as dayNewCnt,
+       date,
+      sum(case last_login_date when date then 1 else 0 end) as dayLoginCnt
+       
+       
+FROM
+        data_analyze_label.dm_label_gamelog_kpi_account_ds
+WHERE
+        ds in ('20200701','20200702','20200703','20200704','20200705','20200706','20200707','20200708','20200709','20200710')
+        -- AND op_id in('2145','2785','27775')
+        AND first_login_date>='2020-07-01'
+        AND account IN (
+                SELECT
+                        id
+                FROM
+                        db_temp.user_cluster_a06e0fb9_2d94_4c71_83ac_0d0ce9c1130f
+                )
+                
+group by ds,date,first_login_date
+order by first_login_date,date
