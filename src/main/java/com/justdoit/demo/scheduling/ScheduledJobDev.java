@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-@Profile("dev")
+@Profile("pro")
 public class ScheduledJobDev {
 
 	/**
@@ -52,7 +52,7 @@ public class ScheduledJobDev {
 	}
 
 	@Scheduled(cron = "0 15 10 15 * ?")
-	@Scheduled(cron = "${cron.expression}")
+	// @Scheduled(cron = "${cron.expression}")
 	public void scheduleTaskUsingCronExpression() {
 
 		long now = System.currentTimeMillis() / 1000;

@@ -52,15 +52,15 @@ spring:
             # Max file size.
             max-file-size: 200MB
             # Max Request Size
-            max-request-size: 215MB
-    jpa:
-        show-sql: true
-        hibernate:
-            ddl-auto: update
-            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-        properties:
-            hibernate:
-                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    #         max-request-size: 215MB
+    # jpa:
+    #     show-sql: true
+    #     hibernate:
+    #         ddl-auto: update
+    #         naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    #     properties:
+    #         hibernate:
+    #             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
     security:
         oauth2:
@@ -134,6 +134,6 @@ app:
         # redirectUri mentioned by the frontend client in the /oauth2/authorize request.
         # We're not using cookies because they won't work well in mobile clients.
         authorizedRedirectUris:
-            - http://localhost:3000/oauth2/redirect
+            - http://localhost:8081
             - myandroidapp://oauth2/redirect
             - myiosapp://oauth2/redirect
